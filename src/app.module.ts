@@ -1,6 +1,4 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AccountsModule } from './accounts/accounts.module';
 import { FactorsModule } from './factors/factors.module';
@@ -14,10 +12,10 @@ import { Products } from './products/entities/products.entity';
 @Module({
   imports: [
     TypeOrmModule.forRoot({
-      type: 'mysql',
+      type: 'postgres',
       host: 'localhost',
-      port: 3306,
-      username: 'root',
+      port: 5432,
+      username: 'postgres',
       database: 'dastak',
       entities: [Accounts, Factors, Factor_items, Categories, Products],
       synchronize: true
@@ -25,8 +23,6 @@ import { Products } from './products/entities/products.entity';
     AccountsModule,
     FactorsModule,
     ProductsModule,
-  ],
-  controllers: [AppController],
-  providers: [AppService],
+  ]
 })
 export class AppModule { }

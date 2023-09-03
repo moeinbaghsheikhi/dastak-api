@@ -7,10 +7,13 @@ export class Categories {
     @PrimaryGeneratedColumn()
     id: number
 
-    @Column({ type: "bigint" })
-    title: number
+    @Column()
+    title: string
 
     @ManyToOne(() => Accounts, (accounts) => accounts.categories)
-    accounts: Accounts;
+    @JoinColumn()
+    account: Accounts;
 
+    @OneToMany(() => Products, (product) => product.category)
+    products: Products;
 }

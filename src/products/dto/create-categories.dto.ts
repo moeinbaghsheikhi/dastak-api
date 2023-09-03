@@ -1,12 +1,11 @@
 import { ApiProperty } from "@nestjs/swagger"
 
 export class CreateCategoriesDto {
-    account_id: number
+    account_id: number;
 
     @ApiProperty({
-        description: '',
-        example: '',
-        type: BigInt
+        description: 'توضیحات موردنیاز برای عنوان دسته‌بندی',
+        example: 'دسته‌بندی جدید'
     })
-    title: number
+    title: string;
 }

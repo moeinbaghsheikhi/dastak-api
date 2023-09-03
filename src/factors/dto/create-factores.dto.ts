@@ -4,7 +4,7 @@ export class CreateFactoresDto {
     account_id: number
 
     @ApiProperty({
-        description: '',
+        description: 'کد فاکتور',
         example: '',
         maxLength: 50,
         uniqueItems: true
@@ -12,17 +12,17 @@ export class CreateFactoresDto {
     code: string
 
     @ApiProperty({
-        description: '',
-        example: '',
+        description: 'درصد تخفیف (بین 1 تا 99)',
+        example: '30',
         type: 'smallint',
         nullable: true
     })
     off_percent: number
 
     @ApiProperty({
-        description: '',
-        example: '',
-        type: BigInt,
+        description: 'وضعیت',
+        example: '1',
+        type: 'smallint',
     })
     status: number
 }

@@ -17,10 +17,10 @@ export class Products {
     stock_count: number
 
     @ManyToOne(() => Accounts, (account) => account.products)
-    accounts: Accounts;
+    account: Accounts;
 
-    @OneToOne(() => Categories)
+    @ManyToOne(() => Categories)
     @JoinColumn()
-    categories: Categories;
+    category: Categories;
 
 }

@@ -19,20 +19,20 @@ export class ProductsService {
 
 
   async create(account_id: number, categories_id: number, createProductsDto: CreateProductsDto) {
-    const accounts = await this.accountRepository.findOneBy({ id: account_id });
-    const categories = await this.categoriesRepository.findOneBy({ id: categories_id })
-    console.log(accounts, '           ', categories)
-    if (!accounts) {
+    const account = await this.accountRepository.findOneBy({ id: account_id });
+    const category = await this.categoriesRepository.findOneBy({ id: categories_id })
+
+    if (!account) {
       throw new HttpException('account Not Found', HttpStatus.BAD_REQUEST);
     }
-    if (!categories) {
+    if (!category) {
       throw new HttpException('categories Not Found', HttpStatus.BAD_REQUEST);
     }
 
     const newProduct = this.productsRepository.create({
       ...createProductsDto,
-      accounts,
-      categories
+      account,
+      category
     })
     await this.productsRepository.save(newProduct)
   }

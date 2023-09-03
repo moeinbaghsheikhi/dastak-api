@@ -6,5 +6,5 @@ export class UpdateCategoriesDto {
         example: '',
         type: BigInt
     })
-    title: number
+    title: string
 }

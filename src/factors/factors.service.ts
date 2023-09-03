@@ -15,31 +15,41 @@ export class FactorsService {
     @InjectRepository(Factors) private factorsRepository: Repository<Factors>
   ) { }
 
+  // ایجاد یک فاکتور جدید
   async create(createFactorDto: CreateFactoresDto) {
-    const accounts = await this.accountRepository.findOneBy({ id: createFactorDto.account_id })
-    if (!accounts)
-      throw new HttpException('Account Not Found', HttpStatus.BAD_REQUEST)
+    // یافتن حساب متناظر با شناسه
+    const account = await this.accountRepository.findOneBy({ id: createFactorDto.account_id });
+    // بررسی وجود حساب
+    if (!account)
+      throw new HttpException('حساب پیدا نشد', HttpStatus.BAD_REQUEST);
 
+    // ایجاد یک فاکتور جدید با استفاده از داده‌های دریافتی
     const newFactor = this.factorsRepository.create({
       ...createFactorDto,
-      accounts
-    })
-    return this.factorsRepository.save(newFactor)
+      account
+    });
+
+    // ذخیره فاکتور جدید در دیتابیس
+    return this.factorsRepository.save(newFactor);
   }
 
+  // بازیابی تمامی فاکتورها
   findAll() {
-    return this.factorsRepository.find()
+    return this.factorsRepository.find();
   }
 
+  // بازیابی یک فاکتور با شناسه مشخص
   findOne(id: number) {
     return this.factorsRepository.findOneBy({ id });
   }
 
+  // به‌روزرسانی یک فاکتور با شناسه مشخص
   update(id: number, updateFactorDto: UpdateFactoresDto) {
-    return this.factorsRepository.update({ id }, { ...updateFactorDto })
+    return this.factorsRepository.update({ id }, { ...updateFactorDto });
   }
 
+  // حذف یک فاکتور با شناسه مشخص
   remove(id: number) {
-    return this.factorsRepository.delete(id)
+    return this.factorsRepository.delete(id);
   }
 }

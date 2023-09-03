@@ -19,36 +19,42 @@ export class FactorsItemService {
         @InjectRepository(Factors) private factorsRepository: Repository<Factors>
     ) { }
 
+    // ایجاد یک آیتم فاکتور جدید
     async create(createFactorItemDto: CreateFactoresItemDto) {
-        const factors = await this.factorsRepository.findOneBy({ id: createFactorItemDto.factor_id })
-        const products = await this.productsRepository.findOneBy({ id: createFactorItemDto.product_id })
+        // یافتن فاکتور متناظر با شناسه
+        const factors = await this.factorsRepository.findOneBy({ id: createFactorItemDto.factor_id });
+        // یافتن محصول متناظر با شناسه
+        const products = await this.productsRepository.findOneBy({ id: createFactorItemDto.product_id });
+
+        // بررسی وجود فاکتور و محصول
         if (!factors)
-            throw new HttpException('factor Not Found', HttpStatus.BAD_REQUEST)
+            throw new HttpException('فاکتور یافت نشد', HttpStatus.BAD_REQUEST);
         if (!products)
-            throw new HttpException('product Not Found', HttpStatus.BAD_REQUEST)
+            throw new HttpException('محصول یافت نشد', HttpStatus.BAD_REQUEST);
 
-
-        const newFactor = this.factorsItemRepository.create({
+        // ایجاد یک آیتم فاکتور جدید با استفاده از داده‌های دریافتی
+        const newFactorItem = this.factorsItemRepository.create({
             ...createFactorItemDto,
             factors,
             products
-        })
-        return this.factorsItemRepository.save(newFactor)
+        });
+
+        // ذخیره آیتم فاکتور جدید در دیتابیس
+        return this.factorsItemRepository.save(newFactorItem);
     }
 
+    // بازیابی تمامی آیتم‌های فاکتور
     findAll() {
-        return this.factorsItemRepository.find({ relations: ['products', 'factors'] })
+        return this.factorsItemRepository.find({ relations: ['products', 'factors'] });
     }
 
+    // بازیابی یک آیتم فاکتور با شناسه مشخص
     findOne(id: number) {
-        return this.factorsItemRepository.findOneBy({ id });
+        return this.factorsItemRepository.findOneBy({id});
     }
 
-    // update(id: number, updateFactorDto: UpdateFactoresDto) {
-    //     return this.factorsItemRepository.update({ id }, { ...updateFactorDto })
-    // }
-
+    // حذف یک آیتم فاکتور با شناسه مشخص
     remove(id: number) {
-        return this.factorsItemRepository.delete(id)
+        return this.factorsItemRepository.delete(id);
     }
 }

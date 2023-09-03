@@ -19,15 +19,12 @@ export class CategoriesService {
 
 
     async create(createCategoriesDto: CreateCategoriesDto) {
-        const accounts = await this.accountRepository.findOneBy({ id: createCategoriesDto.account_id })
-        console.log(accounts)
-        if (!accounts)
+        const account = await this.accountRepository.findOneBy({ id: createCategoriesDto.account_id })
+        console.log(account)
+        if (!account)
             throw new HttpException('Account Not Found', HttpStatus.BAD_REQUEST)
 
-        const newCategories = this.categoriesRepository.create({
-            ...createCategoriesDto,
-            accounts
-        })
+        const newCategories = this.categoriesRepository.create({...createCategoriesDto, account})
         return this.categoriesRepository.save(newCategories)
     }
 
