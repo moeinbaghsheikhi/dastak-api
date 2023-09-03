@@ -1,30 +1,52 @@
-import { ApiProperty } from "@nestjs/swagger"
+import { ApiProperty } from '@nestjs/swagger';
+import { IsInt, IsString, IsNotEmpty, IsNumber, IsOptional, MaxLength, Min, IsPositive } from 'class-validator';
 
 export class CreateProductsDto {
-
-    account_id: number
-
-    categories_id: number
+    @ApiProperty({
+        description: 'شناسه حساب',
+        example: '1',
+        uniqueItems: true
+    })
+    @IsInt({ message: 'شناسه حساب باید یک عدد صحیح باشد' })
+    @IsPositive({ message: 'شناسه حساب باید مقدار مثبت داشته باشد' })
+    account_id: number;
 
     @ApiProperty({
-        description: '',
-        example: '',
+        description: 'شناسه دسته‌بندی',
+        example: '2',
+        uniqueItems: true
+    })
+    @IsInt({ message: 'شناسه دسته‌بندی باید یک عدد صحیح باشد' })
+    @IsPositive({ message: 'شناسه دسته‌بندی باید مقدار مثبت داشته باشد' })
+    categories_id: number;
+
+    @ApiProperty({
+        description: 'عنوان محصول',
+        example: 'محصول نمونه',
         maxLength: 250,
     })
-    title: string
+    @IsString({ message: 'عنوان محصول باید یک رشته باشد' })
+    @IsNotEmpty({ message: 'عنوان محصول نمی‌تواند خالی باشد' })
+    @MaxLength(250, { message: 'عنوان محصول نمی‌تواند بیشتر از 250 کاراکتر داشته باشد' })
+    title: string;
 
     @ApiProperty({
-        description: '',
-        example: '',
+        description: 'قیمت محصول',
+        example: '10000',
         type: BigInt,
     })
-    price: number
+    @IsNumber({}, { message: 'قیمت محصول باید یک عدد صحیح باشد' })
+    @IsPositive({ message: 'قیمت محصول باید مقدار مثبت داشته باشد' })
+    price: number;
 
     @ApiProperty({
-        description: '',
-        example: '',
+        description: 'موجودی انبار',
+        example: '50',
         type: BigInt,
         nullable: true
     })
-    stock_count: number
+    @IsOptional()
+    @IsNumber({}, { message: 'موجودی انبار باید یک عدد صحیح باشد' })
+    @IsPositive({ message: 'موجودی انبار باید مقدار مثبت داشته باشد' })
+    stock_count: number | null;
 }

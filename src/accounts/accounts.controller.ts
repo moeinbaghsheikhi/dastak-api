@@ -3,7 +3,6 @@ import { AccountsService } from './accounts.service';
 import { CreateAccountDto } from './dto/create-account.dto';
 import { UpdateAccountDto } from './dto/update-account.dto';
 import { ApiResponse , ApiTags } from '@nestjs/swagger';
-import { ProductForBiddenResponse } from './dto/forbidden.dto';
 
 @Controller('accounts')
 @ApiTags('accounts')
@@ -11,7 +10,6 @@ export class AccountsController {
   constructor(private readonly accountsService: AccountsService) { }
   
   @Post()
-  @ApiResponse({ status: 201, description: 'create', type: ProductForBiddenResponse })
   create(@Body() createAccountDto: CreateAccountDto) {
     return this.accountsService.create(createAccountDto);
   }

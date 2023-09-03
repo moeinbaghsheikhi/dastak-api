@@ -13,7 +13,7 @@ export class Accounts {
     name: string
 
     @Column({ unique: true })
-    mobile: number
+    mobile: string
 
     @OneToMany(() => Products, (products) => products.account)
     products: Products[]
