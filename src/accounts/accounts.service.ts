@@ -33,4 +33,9 @@ export class AccountsService {
   remove(id: number) {
     return this.accountRepository.delete(id);
   }
+
+  findByMobile(mobile: string) {
+    return this.accountRepository.findOneBy({ mobile })
+  }
+
 }

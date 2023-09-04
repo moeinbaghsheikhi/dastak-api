@@ -1,36 +1,60 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, HttpStatus } from '@nestjs/common';
 import { AccountsService } from './accounts.service';
 import { CreateAccountDto } from './dto/create-account.dto';
 import { UpdateAccountDto } from './dto/update-account.dto';
-import { ApiResponse , ApiTags } from '@nestjs/swagger';
+import { ApiResponse, ApiTags } from '@nestjs/swagger';
+import ResponseFormat from 'src/utils/Addons/response-formats';
 
 @Controller('accounts')
 @ApiTags('accounts')
 export class AccountsController {
   constructor(private readonly accountsService: AccountsService) { }
-  
+
   @Post()
-  create(@Body() createAccountDto: CreateAccountDto) {
-    return this.accountsService.create(createAccountDto);
+  async create(@Body() createAccountDto: CreateAccountDto) {
+    try {
+      const mobile = await this.accountsService.findByMobile(createAccountDto.mobile)
+      if (mobile)
+        return ResponseFormat(false, HttpStatus.BAD_REQUEST, "Mobile Already Exists", null)
+
+      const data = await this.accountsService.create(createAccountDto);
+      return ResponseFormat(true, HttpStatus.CREATED, "CREATED", data)
+    }
+    catch (error) {
+      return ResponseFormat(false, 500, "SERVER-ERROR", null);
+    }
   }
 
   @Get()
-  findAll() {
-    return this.accountsService.findAll();
+  async findAll() {
+    const data = await this.accountsService.findAll();
+    return ResponseFormat(true, HttpStatus.OK, "OK", data)
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.accountsService.findOne(+id);
+  async findOne(@Param('id') id: string) {
+    const data = await this.accountsService.findOne(+id);
+    return ResponseFormat(true, HttpStatus.OK, "OK", data)
+
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateAccountDto: UpdateAccountDto) {
-    return this.accountsService.update(+id, updateAccountDto);
+  async update(@Param('id') id: string, @Body() updateAccountDto: UpdateAccountDto) {
+    try {
+      const mobile = await this.accountsService.findByMobile(updateAccountDto.mobile)
+      if (mobile)
+        return ResponseFormat(false, HttpStatus.BAD_REQUEST, "Mobile Already Exists", null)
+
+      const data = await this.accountsService.update(+id, updateAccountDto);
+      return ResponseFormat(true, HttpStatus.OK, "OK", data)
+    } catch (error) {
+      return ResponseFormat(false, 500, "SERVER-ERROR", null);
+    }
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.accountsService.remove(+id);
+  async remove(@Param('id') id: string) {
+    const data = await this.accountsService.remove(+id);
+    return ResponseFormat(true, HttpStatus.OK, "OK", data)
   }
 }
