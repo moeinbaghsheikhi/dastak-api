@@ -1,8 +1,9 @@
-import { Controller, Get, Post, Body, Put, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Put, Param, Delete, HttpStatus, Patch } from '@nestjs/common';
 import { FactorsService } from './factors.service';
 import { CreateFactoresDto } from './dto/create-factores.dto';
 import { UpdateFactoresDto } from './dto/update-factores.dto';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
+import ResponseFormat from 'src/utils/Addons/response-formats';
 
 @Controller('factors')
 @ApiTags('factors')
@@ -11,31 +12,54 @@ export class FactorsController {
 
   // ایجاد یک فاکتور جدید
   @Post()
-  create(@Body() createFactorDto: CreateFactoresDto) {
-    return this.factorsService.create(createFactorDto);
+  async reate(@Body() createFactorDto: CreateFactoresDto) {
+    try {
+      const code = await this.factorsService.findByCode(createFactorDto.code)
+      console.log(code)
+      if (code)
+        return ResponseFormat(false, HttpStatus.BAD_REQUEST, "Code Already Exists", null)
+
+      const data = await this.factorsService.create(createFactorDto);
+      return ResponseFormat(true, HttpStatus.CREATED, "OK", data)
+    } catch (error) {
+      return ResponseFormat(false, 500, "SERVER-ERROR", null);
+    }
   }
 
   // بازیابی تمامی فاکتورها
   @Get()
-  findAll() {
-    return this.factorsService.findAll();
+  async findAll() {
+    const data = await this.factorsService.findAll();
+    return ResponseFormat(true, HttpStatus.OK, "OK", data)
   }
 
   // بازیابی یک فاکتور با شناسه مشخص
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.factorsService.findOne(+id);
+  async findOne(@Param('id') id: string) {
+    const data = await this.factorsService.findOne(+id);
+    return ResponseFormat(true, HttpStatus.OK, "OK", data)
   }
 
   // به‌روزرسانی یک فاکتور با شناسه مشخص
-  @Put(':id')
-  update(@Param('id') id: string, @Body() updateFactorDto: UpdateFactoresDto) {
-    return this.factorsService.update(+id, updateFactorDto);
+  @Patch(':id')
+  async update(@Param('id') id: string, @Body() updateFactorDto: UpdateFactoresDto) {
+    try {
+      const code = await this.factorsService.findByCode(updateFactorDto.code)
+      if (code)
+        return ResponseFormat(false, HttpStatus.BAD_REQUEST, "Code Already Exists", null)
+
+      const data = await this.factorsService.update(+id, updateFactorDto);
+      return ResponseFormat(true, HttpStatus.OK, "OK", data)
+    } catch (error) {
+      return ResponseFormat(false, 500, "SERVER-ERROR", null);
+    }
+
   }
 
   // حذف یک فاکتور با شناسه مشخص
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.factorsService.remove(+id);
+  async remove(@Param('id') id: string) {
+    const data = await this.factorsService.remove(+id);
+    return ResponseFormat(true, HttpStatus.OK, "OK", data)
   }
 }

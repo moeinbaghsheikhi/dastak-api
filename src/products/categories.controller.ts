@@ -1,9 +1,10 @@
-import { Controller, Get, Post, Body, Put, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Put, Param, Delete, HttpStatus } from '@nestjs/common';
 import { UpdateProductsDto } from './dto/update-products.dto';
 import { CategoriesService } from './categories.service';
 import { CreateCategoriesDto } from './dto/create-categories.dto';
 import { UpdateCategoriesDto } from './dto/update-categories.dto';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
+import ResponseFormat from 'src/utils/Addons/response-formats';
 
 @Controller('categories')
 @ApiTags('categories')
@@ -11,29 +12,33 @@ export class CategoriesController {
     constructor(private readonly categoriesService: CategoriesService) { }
 
     @Post()
-    create(
-        @Body() createCategoriesDto: CreateCategoriesDto) {
-        return this.categoriesService.create(createCategoriesDto);
+    async create(@Body() createCategoriesDto: CreateCategoriesDto) {
+        const data = await this.categoriesService.create(createCategoriesDto);
+        return ResponseFormat(true, HttpStatus.OK, "OK", data)
     }
 
     @Get()
-    findAll() {
-        return this.categoriesService.findAll();
+    async findAll() {
+        const data = await this.categoriesService.findAll();
+        return ResponseFormat(true, HttpStatus.OK, "OK", data)
     }
 
     @Get(':id')
-    findOne(@Param('id') id: string) {
-        return this.categoriesService.findOne(+id);
+    async findOne(@Param('id') id: string) {
+        const data = await this.categoriesService.findOne(+id);
+        return ResponseFormat(true, HttpStatus.OK, "OK", data)
     }
 
     @Put(':id')
-    update(@Param('id') id: string, @Body() updateCategoriesDto: UpdateCategoriesDto) {
-        return this.categoriesService.update(+id, updateCategoriesDto);
+    async update(@Param('id') id: string, @Body() updateCategoriesDto: UpdateCategoriesDto) {
+        const data = await this.categoriesService.update(+id, updateCategoriesDto);
+        return ResponseFormat(true, HttpStatus.OK, "OK", data)
     }
 
     @Delete(':id')
-    remove(@Param('id') id: string) {
-        return this.categoriesService.remove(+id);
+    async remove(@Param('id') id: string) {
+        const data = await this.categoriesService.remove(+id);
+        return ResponseFormat(true, HttpStatus.OK, "OK", data)
     }
 
 }

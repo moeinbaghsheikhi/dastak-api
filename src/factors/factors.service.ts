@@ -19,6 +19,8 @@ export class FactorsService {
   async create(createFactorDto: CreateFactoresDto) {
     // یافتن حساب متناظر با شناسه
     const account = await this.accountRepository.findOneBy({ id: createFactorDto.account_id });
+    console.log(account)
+
     // بررسی وجود حساب
     if (!account)
       throw new HttpException('حساب پیدا نشد', HttpStatus.BAD_REQUEST);
@@ -51,5 +53,9 @@ export class FactorsService {
   // حذف یک فاکتور با شناسه مشخص
   remove(id: number) {
     return this.factorsRepository.delete(id);
+  }
+
+  findByCode(code: string) {
+    return this.factorsRepository.findOneBy({ code })
   }
 }
