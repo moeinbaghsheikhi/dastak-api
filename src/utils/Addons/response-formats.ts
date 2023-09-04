@@ -13,6 +13,8 @@ const ResponseMessage = (message) => {
     switch (message) {
         case "OK":
             return "اطلاعات با موفقیت دریافت شد";
+        case "CREATED":
+            return "با موفقیت اضافه شد";
         case "NOT-FOUND":
             return "چیزی وجود ندارد";
         case "SERVER-ERROR":
