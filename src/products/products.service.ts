@@ -25,7 +25,7 @@ export class ProductsService {
     if (!account) {
       throw new HttpException('account Not Found', HttpStatus.BAD_REQUEST);
     }
-    if (!category) {
+    if (categories_id && !category) {
       throw new HttpException('categories Not Found', HttpStatus.BAD_REQUEST);
     }
 
@@ -38,11 +38,11 @@ export class ProductsService {
   }
 
   findAll() {
-    return this.productsRepository.find({ relations: ['categories'] })
+    return this.productsRepository.find({ relations: ['category'] })
   }
 
   findOne(id: number) {
-    return this.productsRepository.findOne({ relations: ['categories'], where: { id } });
+    return this.productsRepository.findOne({ relations: ['category'], where: { id } });
   }
 
   update(id: number, updateProductsDto: UpdateProductsDto) {

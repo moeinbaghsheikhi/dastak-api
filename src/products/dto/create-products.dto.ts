@@ -16,8 +16,8 @@ export class CreateProductsDto {
         example: '2',
         uniqueItems: true
     })
-    @IsInt({ message: 'شناسه دسته‌بندی باید یک عدد صحیح باشد' })
-    @IsPositive({ message: 'شناسه دسته‌بندی باید مقدار مثبت داشته باشد' })
+    // @IsInt({ message: 'شناسه دسته‌بندی باید یک عدد صحیح باشد' })
+    // @IsPositive({ message: 'شناسه دسته‌بندی باید مقدار مثبت داشته باشد' })
     categories_id: number;
 
     @ApiProperty({
