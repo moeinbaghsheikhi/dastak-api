@@ -28,7 +28,7 @@ export class AccountsController {
   @Get()
   async findAll() {
     const data = await this.accountsService.findAll()
-    if (!data)
+    if (data[0] == null)
       return ResponseFormat(false, HttpStatus.NOT_FOUND, "NOT-FOUND", null)
 
     return ResponseFormat(true, HttpStatus.OK, "OK", data)
@@ -37,7 +37,7 @@ export class AccountsController {
   @Get(':id')
   async findOne(@Param('id') id: string) {
     const data = await this.accountsService.findOne(+id);
-    if (!data)
+    if (data[0] == null)
       return ResponseFormat(false, HttpStatus.NOT_FOUND, "NOT-FOUND", null)
     return ResponseFormat(true, HttpStatus.OK, "OK", data)
 
@@ -56,7 +56,7 @@ export class AccountsController {
   @Delete(':id')
   async remove(@Param('id') id: string) {
     const data = await this.accountsService.remove(+id);
-    if (!data)
+    if (data[0] == null)
       return ResponseFormat(false, HttpStatus.NOT_FOUND, "NOT-FOUND", null)
     return ResponseFormat(true, HttpStatus.OK, "OK", data)
   }

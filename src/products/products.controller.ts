@@ -20,7 +20,8 @@ export class ProductsController {
   @Get()
   async findAll() {
     const data = await this.productsService.findAll();
-    if (!data)
+    console.log(data)
+    if (data[0] == null)
       return ResponseFormat(false, HttpStatus.NOT_FOUND, "NOT-FOUND", null)
 
     return ResponseFormat(true, HttpStatus.OK, "OK", data)
@@ -29,7 +30,7 @@ export class ProductsController {
   @Get(':id')
   async findOne(@Param('id') id: string) {
     const data = await this.productsService.findOne(+id);
-    if (!data)
+    if (data[0] == null)
       return ResponseFormat(false, HttpStatus.NOT_FOUND, "NOT-FOUND", null)
 
     return ResponseFormat(true, HttpStatus.OK, "OK", data)
@@ -44,7 +45,7 @@ export class ProductsController {
   @Delete(':id')
   async remove(@Param('id') id: string) {
     const data = await this.productsService.remove(+id);
-    if (!data)
+    if (data[0] == null)
       return ResponseFormat(false, HttpStatus.NOT_FOUND, "NOT-FOUND", null)
 
     return ResponseFormat(true, HttpStatus.OK, "OK", data)

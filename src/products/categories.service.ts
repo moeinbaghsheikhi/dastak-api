@@ -24,7 +24,7 @@ export class CategoriesService {
         if (!account)
             throw new HttpException('Account Not Found', HttpStatus.BAD_REQUEST)
 
-        const newCategories = this.categoriesRepository.create({...createCategoriesDto, account})
+        const newCategories = this.categoriesRepository.create({ ...createCategoriesDto, account })
         return this.categoriesRepository.save(newCategories)
     }
 

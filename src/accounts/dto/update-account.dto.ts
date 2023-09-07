@@ -16,7 +16,6 @@ export class UpdateAccountDto{
         description: 'شماره تلفن همراه',
         example: '09123456789',
         maximum: 11,
-        uniqueItems: true,
     })
     @IsString({ message: 'شماره تلفن همراه باید یک رشته باشد' })
     @IsNotEmpty({ message: 'شماره تلفن همراه نمی‌تواند خالی باشد' })

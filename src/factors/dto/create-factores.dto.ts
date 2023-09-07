@@ -5,7 +5,6 @@ export class CreateFactoresDto {
     @ApiProperty({
         description: 'شناسه حساب',
         example: '1',
-        uniqueItems: true
     })
     @IsInt({ message: 'شناسه حساب باید یک عدد صحیح باشد' })
     @IsPositive({ message: 'شناسه حساب باید مقدار مثبت داشته باشد' })
@@ -15,7 +14,6 @@ export class CreateFactoresDto {
         description: 'کد فاکتور',
         example: '12345',
         maxLength: 50,
-        uniqueItems: true
     })
     @IsNotEmpty({ message: 'کد فاکتور نمی‌تواند خالی باشد' })
     @MaxLength(50, { message: 'کد فاکتور نمی‌تواند بیشتر از 50 کاراکتر داشته باشد' })

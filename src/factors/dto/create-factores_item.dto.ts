@@ -5,7 +5,6 @@ export class CreateFactoresItemDto {
     @ApiProperty({
         description: 'آیدی فاکتور مربوطه',
         example: '1',
-        uniqueItems: true
     })
     @IsInt({ message: 'آیدی فاکتور باید یک عدد صحیح باشد' })
     @IsPositive({ message: 'آیدی فاکتور باید مقدار مثبت داشته باشد' })
@@ -14,7 +13,6 @@ export class CreateFactoresItemDto {
     @ApiProperty({
         description: 'آیدی محصول مربوطه',
         example: '2',
-        uniqueItems: true
     })
     @IsInt({ message: 'آیدی محصول باید یک عدد صحیح باشد' })
     @IsPositive({ message: 'آیدی محصول باید مقدار مثبت داشته باشد' })

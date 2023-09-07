@@ -33,7 +33,7 @@ export class FactorsController {
   @Get()
   async findAll() {
     const data = await this.factorsService.findAll();
-    if (!data)
+    if (data[0] == null)
       return ResponseFormat(false, HttpStatus.NOT_FOUND, "NOT-FOUND", null)
     return ResponseFormat(true, HttpStatus.OK, "OK", data)
   }
@@ -42,7 +42,7 @@ export class FactorsController {
   @Get(':id')
   async findOne(@Param('id') id: string) {
     const data = await this.factorsService.findOne(+id);
-    if (!data)
+    if (data[0] == null)
       return ResponseFormat(false, HttpStatus.NOT_FOUND, "NOT-FOUND", null)
 
     return ResponseFormat(true, HttpStatus.OK, "OK", data)
@@ -64,7 +64,7 @@ export class FactorsController {
   @Delete(':id')
   async remove(@Param('id') id: string) {
     const data = await this.factorsService.remove(+id);
-    if (!data)
+    if (data[0] == null)
       return ResponseFormat(false, HttpStatus.NOT_FOUND, "NOT-FOUND", null)
 
     return ResponseFormat(true, HttpStatus.OK, "OK", data)

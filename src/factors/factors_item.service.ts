@@ -50,7 +50,7 @@ export class FactorsItemService {
 
     // بازیابی یک آیتم فاکتور با شناسه مشخص
     findOne(id: number) {
-        return this.factorsItemRepository.findOneBy({id});
+        return this.factorsItemRepository.findOneBy({ id });
     }
 
     // حذف یک آیتم فاکتور با شناسه مشخص

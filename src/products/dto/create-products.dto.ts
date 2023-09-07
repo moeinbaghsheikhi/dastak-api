@@ -5,7 +5,6 @@ export class CreateProductsDto {
     @ApiProperty({
         description: 'شناسه حساب',
         example: '1',
-        uniqueItems: true
     })
     @IsInt({ message: 'شناسه حساب باید یک عدد صحیح باشد' })
     @IsPositive({ message: 'شناسه حساب باید مقدار مثبت داشته باشد' })
@@ -14,7 +13,6 @@ export class CreateProductsDto {
     @ApiProperty({
         description: 'شناسه دسته‌بندی',
         example: '2',
-        uniqueItems: true
     })
     // @IsInt({ message: 'شناسه دسته‌بندی باید یک عدد صحیح باشد' })
     // @IsPositive({ message: 'شناسه دسته‌بندی باید مقدار مثبت داشته باشد' })
