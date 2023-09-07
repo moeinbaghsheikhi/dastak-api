@@ -5,8 +5,6 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Accounts } from 'src/accounts/entities/account.entity';
 import { Repository } from 'typeorm';
 import { Factors } from './entities/factors.entity';
-import { HttpStatus } from '@nestjs/common/enums';
-import { HttpException } from '@nestjs/common/exceptions';
 
 @Injectable()
 export class FactorsService {
@@ -34,12 +32,18 @@ export class FactorsService {
 
   // بازیابی تمامی فاکتورها
   findAll() {
-    return this.factorsRepository.find();
+    return this.factorsRepository.find({relations: ['factor_items']});
   }
 
   // بازیابی یک فاکتور با شناسه مشخص
-  findOne(id: number) {
-    return this.factorsRepository.findOneBy({ id });
+  async findOne(id: number) {
+    // return this.factorsRepository.findOne({ relations: ['factor_items'], where: {id} });
+   return this.factorsRepository.createQueryBuilder('factor')
+   .leftJoinAndSelect('factor.factor_items', 'factor_items')
+   .leftJoinAndSelect('factor_items.product', 'products')
+   .where('factor.id = :id', { id })
+   .getOne();
+ 
   }
 
   // به‌روزرسانی یک فاکتور با شناسه مشخص

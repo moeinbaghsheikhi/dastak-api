@@ -9,10 +9,10 @@ export class Factor_items {
 
     @OneToOne(() => Products)
     @JoinColumn()
-    products: Products
+    product: Products
 
-    @ManyToOne(() => Factors, (factors) => factors.Factor_items)
-    factors: Factors;
+    @ManyToOne(() => Factors, (factors) => factors.factor_items)
+    factor: Factors;
 
     @CreateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP'})
     createdAt: Date;

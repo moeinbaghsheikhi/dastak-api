@@ -22,21 +22,21 @@ export class FactorsItemService {
     // ایجاد یک آیتم فاکتور جدید
     async create(createFactorItemDto: CreateFactoresItemDto) {
         // یافتن فاکتور متناظر با شناسه
-        const factors = await this.factorsRepository.findOneBy({ id: createFactorItemDto.factor_id });
+        const factor = await this.factorsRepository.findOneBy({ id: createFactorItemDto.factor_id });
         // یافتن محصول متناظر با شناسه
-        const products = await this.productsRepository.findOneBy({ id: createFactorItemDto.product_id });
+        const product = await this.productsRepository.findOneBy({ id: createFactorItemDto.product_id });
 
         // بررسی وجود فاکتور و محصول
-        if (!factors)
+        if (!factor)
             throw new HttpException('فاکتور یافت نشد', HttpStatus.BAD_REQUEST);
-        if (!products)
+        if (!product)
             throw new HttpException('محصول یافت نشد', HttpStatus.BAD_REQUEST);
 
         // ایجاد یک آیتم فاکتور جدید با استفاده از داده‌های دریافتی
         const newFactorItem = this.factorsItemRepository.create({
             ...createFactorItemDto,
-            factors,
-            products
+            factor,
+            product
         });
 
         // ذخیره آیتم فاکتور جدید در دیتابیس
@@ -45,7 +45,7 @@ export class FactorsItemService {
 
     // بازیابی تمامی آیتم‌های فاکتور
     findAll() {
-        return this.factorsItemRepository.find({ relations: ['products', 'factors'] });
+        return this.factorsItemRepository.find({ relations: ['product', 'factor'] });
     }
 
     // بازیابی یک آیتم فاکتور با شناسه مشخص

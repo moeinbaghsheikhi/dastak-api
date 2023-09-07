@@ -12,7 +12,7 @@ export class FactorsController {
 
   // ایجاد یک فاکتور جدید
   @Post()
-  async reate(@Body() createFactorDto: CreateFactoresDto) {
+  async create(@Body() createFactorDto: CreateFactoresDto) {
     try {
       const code = await this.factorsService.findByCode(createFactorDto.code)
       console.log(code)
@@ -33,8 +33,7 @@ export class FactorsController {
   @Get()
   async findAll() {
     const data = await this.factorsService.findAll();
-    if (data[0] == null)
-      return ResponseFormat(false, HttpStatus.NOT_FOUND, "NOT-FOUND", null)
+    
     return ResponseFormat(true, HttpStatus.OK, "OK", data)
   }
 
@@ -42,7 +41,7 @@ export class FactorsController {
   @Get(':id')
   async findOne(@Param('id') id: string) {
     const data = await this.factorsService.findOne(+id);
-    if (data[0] == null)
+    if (!data)
       return ResponseFormat(false, HttpStatus.NOT_FOUND, "NOT-FOUND", null)
 
     return ResponseFormat(true, HttpStatus.OK, "OK", data)

@@ -19,9 +19,9 @@ export class Factors {
     @ManyToOne(() => Accounts, (accounts) => accounts.factors)
     account: Accounts;
 
-    @OneToMany(() => Factor_items, (Factor_items) => Factor_items.factors)
+    @OneToMany(() => Factor_items, (factor_items) => factor_items.factor)
     @JoinColumn()
-    Factor_items: Factor_items[];
+    factor_items: Factor_items[];
 
     @CreateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP'})
     createdAt: Date;
