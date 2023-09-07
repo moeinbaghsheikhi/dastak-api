@@ -4,9 +4,10 @@ import { CreateAccountDto } from './dto/create-account.dto';
 import { UpdateAccountDto } from './dto/update-account.dto';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import ResponseFormat from 'src/utils/Addons/response-formats';
+import { LoginDto } from './dto/login-account.dto';
 
-@Controller('accounts')
-@ApiTags('accounts')
+@Controller('account')
+@ApiTags('account')
 export class AccountsController {
   constructor(private readonly accountsService: AccountsService) { }
 
@@ -19,6 +20,20 @@ export class AccountsController {
 
       const data = await this.accountsService.create(createAccountDto);
       return ResponseFormat(true, HttpStatus.CREATED, "CREATED", data)
+    }
+    catch (error) {
+      return ResponseFormat(false, 500, "SERVER-ERROR", null);
+    }
+  }
+
+  @Post('login')
+  async login(@Body() loginData: LoginDto) {
+    try {
+      const data = await this.accountsService.login(loginData.mobile, loginData.password)
+      if (!data)
+        return ResponseFormat(false, HttpStatus.BAD_REQUEST, "کاربری پیدا نشد!", null)
+
+      return ResponseFormat(true, HttpStatus.OK, "ورود با موفقیت انجام شد", data)
     }
     catch (error) {
       return ResponseFormat(false, 500, "SERVER-ERROR", null);

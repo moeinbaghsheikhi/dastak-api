@@ -1,17 +1,7 @@
-import { ApiProperty } from "@nestjs/swagger"
-import { IsMobilePhone, IsNotEmpty, IsString, MaxLength } from "class-validator";
+import { ApiProperty } from '@nestjs/swagger';
+import { IsString, IsNotEmpty, IsMobilePhone, MaxLength } from 'class-validator';
 
-export class UpdateAccountDto{
-    @ApiProperty({
-        description: 'نام حساب',
-        example: 'Reza',
-        maxLength: 250,
-    })
-    @IsString({ message: 'نام باید یک رشته باشد' })
-    @IsNotEmpty({ message: 'نام نمی‌تواند خالی باشد' })
-    @MaxLength(250, { message: 'نام نمی‌تواند بیشتر از 250 کاراکتر داشته باشد' })
-    name: string;
-
+export class LoginDto {
     @ApiProperty({
         description: 'شماره تلفن همراه',
         example: '09123456789',

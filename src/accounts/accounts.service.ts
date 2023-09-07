@@ -38,4 +38,8 @@ export class AccountsService {
     return this.accountRepository.findOneBy({ mobile })
   }
 
+  login(mobile: string, password: string) {
+    return this.accountRepository.findOne({where: {mobile: mobile, password: password}})
+  }
+
 }

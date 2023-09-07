@@ -15,6 +15,9 @@ export class Accounts {
     @Column({ unique: true })
     mobile: string
 
+    @Column({nullable: true})
+    password: string
+
     @OneToMany(() => Products, (products) => products.account)
     products: Products[]
 
