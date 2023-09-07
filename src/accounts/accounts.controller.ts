@@ -27,13 +27,18 @@ export class AccountsController {
 
   @Get()
   async findAll() {
-    const data = await this.accountsService.findAll();
+    const data = await this.accountsService.findAll()
+    if (!data)
+      return ResponseFormat(false, HttpStatus.NOT_FOUND, "NOT-FOUND", null)
+
     return ResponseFormat(true, HttpStatus.OK, "OK", data)
   }
 
   @Get(':id')
   async findOne(@Param('id') id: string) {
     const data = await this.accountsService.findOne(+id);
+    if (!data)
+      return ResponseFormat(false, HttpStatus.NOT_FOUND, "NOT-FOUND", null)
     return ResponseFormat(true, HttpStatus.OK, "OK", data)
 
   }
@@ -41,10 +46,6 @@ export class AccountsController {
   @Patch(':id')
   async update(@Param('id') id: string, @Body() updateAccountDto: UpdateAccountDto) {
     try {
-      const mobile = await this.accountsService.findByMobile(updateAccountDto.mobile)
-      if (mobile)
-        return ResponseFormat(false, HttpStatus.BAD_REQUEST, "Mobile Already Exists", null)
-
       const data = await this.accountsService.update(+id, updateAccountDto);
       return ResponseFormat(true, HttpStatus.OK, "OK", data)
     } catch (error) {
@@ -55,6 +56,8 @@ export class AccountsController {
   @Delete(':id')
   async remove(@Param('id') id: string) {
     const data = await this.accountsService.remove(+id);
+    if (!data)
+      return ResponseFormat(false, HttpStatus.NOT_FOUND, "NOT-FOUND", null)
     return ResponseFormat(true, HttpStatus.OK, "OK", data)
   }
 }

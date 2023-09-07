@@ -2,14 +2,14 @@ import { ApiProperty } from "@nestjs/swagger"
 import { IsInt, IsNotEmpty, IsNumber, IsOptional, IsPositive, Max, MaxLength, Min } from "class-validator";
 
 export class UpdateFactoresDto {
-    @ApiProperty({
-        description: 'شناسه حساب',
-        example: '1',
-        uniqueItems: true
-    })
-    @IsInt({ message: 'شناسه حساب باید یک عدد صحیح باشد' })
-    @IsPositive({ message: 'شناسه حساب باید مقدار مثبت داشته باشد' })
-    account_id: number;
+    // @ApiProperty({
+    //     description: 'شناسه حساب',
+    //     example: '1',
+    //     uniqueItems: true
+    // })
+    // @IsInt({ message: 'شناسه حساب باید یک عدد صحیح باشد' })
+    // @IsPositive({ message: 'شناسه حساب باید مقدار مثبت داشته باشد' })
+    // account_id: number;
 
     @ApiProperty({
         description: 'کد فاکتور',

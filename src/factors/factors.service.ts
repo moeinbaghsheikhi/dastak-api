@@ -19,12 +19,9 @@ export class FactorsService {
   async create(createFactorDto: CreateFactoresDto) {
     // یافتن حساب متناظر با شناسه
     const account = await this.accountRepository.findOneBy({ id: createFactorDto.account_id });
-    console.log(account)
-
     // بررسی وجود حساب
     if (!account)
-      throw new HttpException('حساب پیدا نشد', HttpStatus.BAD_REQUEST);
-
+      return;
     // ایجاد یک فاکتور جدید با استفاده از داده‌های دریافتی
     const newFactor = this.factorsRepository.create({
       ...createFactorDto,

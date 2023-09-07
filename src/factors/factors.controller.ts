@@ -20,6 +20,9 @@ export class FactorsController {
         return ResponseFormat(false, HttpStatus.BAD_REQUEST, "Code Already Exists", null)
 
       const data = await this.factorsService.create(createFactorDto);
+      if (data == null)
+        return ResponseFormat(false, HttpStatus.BAD_REQUEST, "Account Not Found", null)
+
       return ResponseFormat(true, HttpStatus.CREATED, "OK", data)
     } catch (error) {
       return ResponseFormat(false, 500, "SERVER-ERROR", null);
@@ -30,6 +33,8 @@ export class FactorsController {
   @Get()
   async findAll() {
     const data = await this.factorsService.findAll();
+    if (!data)
+      return ResponseFormat(false, HttpStatus.NOT_FOUND, "NOT-FOUND", null)
     return ResponseFormat(true, HttpStatus.OK, "OK", data)
   }
 
@@ -37,6 +42,9 @@ export class FactorsController {
   @Get(':id')
   async findOne(@Param('id') id: string) {
     const data = await this.factorsService.findOne(+id);
+    if (!data)
+      return ResponseFormat(false, HttpStatus.NOT_FOUND, "NOT-FOUND", null)
+
     return ResponseFormat(true, HttpStatus.OK, "OK", data)
   }
 
@@ -44,10 +52,6 @@ export class FactorsController {
   @Patch(':id')
   async update(@Param('id') id: string, @Body() updateFactorDto: UpdateFactoresDto) {
     try {
-      const code = await this.factorsService.findByCode(updateFactorDto.code)
-      if (code)
-        return ResponseFormat(false, HttpStatus.BAD_REQUEST, "Code Already Exists", null)
-
       const data = await this.factorsService.update(+id, updateFactorDto);
       return ResponseFormat(true, HttpStatus.OK, "OK", data)
     } catch (error) {
@@ -60,6 +64,9 @@ export class FactorsController {
   @Delete(':id')
   async remove(@Param('id') id: string) {
     const data = await this.factorsService.remove(+id);
+    if (!data)
+      return ResponseFormat(false, HttpStatus.NOT_FOUND, "NOT-FOUND", null)
+
     return ResponseFormat(true, HttpStatus.OK, "OK", data)
   }
 }
