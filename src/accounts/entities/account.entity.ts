@@ -12,6 +12,12 @@ export class Accounts {
     @Column({ length: 250 })
     name: string
 
+    @Column({ length: 250, nullable: true })
+    account_type: string
+
+    @Column({ nullable: true })
+    sale_count: number
+
     @Column({ unique: true })
     mobile: string
 

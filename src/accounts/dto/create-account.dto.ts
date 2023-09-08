@@ -13,6 +13,18 @@ export class CreateAccountDto {
     name: string;
 
     @ApiProperty({
+        description: 'نوع محصول : physical یا digital',
+        example: 'digital'
+    })
+    account_type: string;
+
+    @ApiProperty({
+        description: 'فروش در ماه',
+        example: '1'
+    })
+    sale_count: number;
+
+    @ApiProperty({
         description: 'شماره تلفن همراه',
         example: '09123456789',
         maximum: 11,
