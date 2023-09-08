@@ -20,8 +20,6 @@ export class CategoriesController {
     @Get()
     async findAll() {
         const data = await this.categoriesService.findAll();
-        if (data[0] == null)
-            return ResponseFormat(false, HttpStatus.NOT_FOUND, "NOT-FOUND", null)
 
         return ResponseFormat(true, HttpStatus.OK, "OK", data)
     }
@@ -29,7 +27,7 @@ export class CategoriesController {
     @Get(':id')
     async findOne(@Param('id') id: string) {
         const data = await this.categoriesService.findOne(+id);
-        if (data[0] == null)
+        if (!data)
             return ResponseFormat(false, HttpStatus.NOT_FOUND, "NOT-FOUND", null)
 
         return ResponseFormat(true, HttpStatus.OK, "OK", data)
@@ -44,7 +42,7 @@ export class CategoriesController {
     @Delete(':id')
     async remove(@Param('id') id: string) {
         const data = await this.categoriesService.remove(+id);
-        if (data[0] == null)
+        if (!data)
             return ResponseFormat(false, HttpStatus.NOT_FOUND, "NOT-FOUND", null)
 
         return ResponseFormat(true, HttpStatus.OK, "OK", data)
