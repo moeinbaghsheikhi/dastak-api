@@ -5,9 +5,10 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Accounts } from './entities/account.entity';
 import { Products } from 'src/products/entities/products.entity';
 import { Categories } from 'src/products/entities/categories.entity';
+import { HttpModule } from '@nestjs/axios';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Accounts, Products, Categories])],
+  imports: [TypeOrmModule.forFeature([Accounts, Products, Categories]), HttpModule],
   controllers: [AccountsController],
   providers: [AccountsService],
 })

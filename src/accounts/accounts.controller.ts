@@ -5,6 +5,7 @@ import { UpdateAccountDto } from './dto/update-account.dto';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import ResponseFormat from 'src/utils/Addons/response-formats';
 import { LoginDto } from './dto/login-account.dto';
+import { otpnData } from './dto/otp-account.dto';
 
 @Controller('account')
 @ApiTags('account')
@@ -34,6 +35,25 @@ export class AccountsController {
         return ResponseFormat(false, HttpStatus.BAD_REQUEST, "کاربری پیدا نشد!", null)
 
       return ResponseFormat(true, HttpStatus.OK, "ورود با موفقیت انجام شد", data)
+    }
+    catch (error) {
+      return ResponseFormat(false, 500, "SERVER-ERROR", null);
+    }
+  }
+
+  @Post('otp')
+  async otp(@Body() otpnData: otpnData) {
+    try {
+      const otpCode = (Math.floor(Math.random() * (9999 - 1000)) + 1000).toString();
+      const data = await this.accountsService.findOneByMobile(otpnData.mobile);
+      if (!data)
+        return ResponseFormat(false, HttpStatus.BAD_REQUEST, "کاربری پیدا نشد!", null)
+
+      const otp = await this.accountsService.otpsend(otpnData.mobile, otpCode)
+      data.password = otpCode
+      
+      await this.accountsService.update(data.id,{...data});
+      return ResponseFormat(true, HttpStatus.OK, "پیامک با موفقیت ارسال شد", data)
     }
     catch (error) {
       return ResponseFormat(false, 500, "SERVER-ERROR", null);
