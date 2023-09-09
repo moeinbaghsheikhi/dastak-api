@@ -11,15 +11,6 @@ export class CreateFactoresDto {
     account_id: number;
 
     @ApiProperty({
-        description: 'کد فاکتور',
-        example: '12345',
-        maxLength: 50,
-    })
-    @IsNotEmpty({ message: 'کد فاکتور نمی‌تواند خالی باشد' })
-    @MaxLength(50, { message: 'کد فاکتور نمی‌تواند بیشتر از 50 کاراکتر داشته باشد' })
-    code: string;
-
-    @ApiProperty({
         description: 'درصد تخفیف (بین 1 تا 99)',
         example: '30',
         type: 'smallint',

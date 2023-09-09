@@ -14,18 +14,16 @@ export class FactorsController {
   @Post()
   async create(@Body() createFactorDto: CreateFactoresDto) {
     try {
-      const code = await this.factorsService.findByCode(createFactorDto.code)
-      console.log(code)
-      if (code)
-        return ResponseFormat(false, HttpStatus.BAD_REQUEST, "Code Already Exists", null)
+      const code = await this.factorsService.findByCode()
+      const data = await this.factorsService.create(createFactorDto, code);
 
-      const data = await this.factorsService.create(createFactorDto);
       if (data == null)
         return ResponseFormat(false, HttpStatus.BAD_REQUEST, "Account Not Found", null)
-
       return ResponseFormat(true, HttpStatus.CREATED, "OK", data)
+
     } catch (error) {
-      return ResponseFormat(false, 500, "SERVER-ERROR", null);
+      console.log(error)
+      return ResponseFormat(false, 500, "SERVER-ERROR", error);
     }
   }
 
@@ -33,7 +31,7 @@ export class FactorsController {
   @Get()
   async findAll() {
     const data = await this.factorsService.findAll();
-    
+
     return ResponseFormat(true, HttpStatus.OK, "OK", data)
   }
 

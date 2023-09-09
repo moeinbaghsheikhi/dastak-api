@@ -14,15 +14,18 @@ export class FactorsService {
   ) { }
 
   // ایجاد یک فاکتور جدید
-  async create(createFactorDto: CreateFactoresDto) {
+  async create(createFactorDto: CreateFactoresDto, code: string) {
     // یافتن حساب متناظر با شناسه
     const account = await this.accountRepository.findOneBy({ id: createFactorDto.account_id });
+
     // بررسی وجود حساب
     if (!account)
       return;
+
     // ایجاد یک فاکتور جدید با استفاده از داده‌های دریافتی
     const newFactor = this.factorsRepository.create({
       ...createFactorDto,
+      code,
       account
     });
 
@@ -32,18 +35,18 @@ export class FactorsService {
 
   // بازیابی تمامی فاکتورها
   findAll() {
-    return this.factorsRepository.find({relations: ['factor_items', 'account']});
+    return this.factorsRepository.find({ relations: ['factor_items', 'account'] });
   }
 
   // بازیابی یک فاکتور با شناسه مشخص
   async findOne(id: number) {
     // return this.factorsRepository.findOne({ relations: ['factor_items'], where: {id} });
-   return this.factorsRepository.createQueryBuilder('factor')
-   .leftJoinAndSelect('factor.factor_items', 'factor_items')
-   .leftJoinAndSelect('factor_items.product', 'products')
-   .where('factor.id = :id', { id })
-   .getOne();
- 
+    return this.factorsRepository.createQueryBuilder('factor')
+      .leftJoinAndSelect('factor.factor_items', 'factor_items')
+      .leftJoinAndSelect('factor_items.product', 'products')
+      .where('factor.id = :id', { id })
+      .getOne();
+
   }
 
   // به‌روزرسانی یک فاکتور با شناسه مشخص
@@ -56,7 +59,21 @@ export class FactorsService {
     return this.factorsRepository.delete(id);
   }
 
-  findByCode(code: string) {
-    return this.factorsRepository.findOneBy({ code })
+  async findByCode() {
+    let result = '';
+    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    const charactersLength = characters.length;
+    while (true) {
+
+      for (let counter = 0; counter < 5; counter++) {
+        result += characters.charAt(Math.floor(Math.random() * charactersLength));
+      }
+      const test = await this.factorsRepository.findOneBy({ code: result })
+
+      if (!test)
+        break
+    }
+
+    return result
   }
 }
