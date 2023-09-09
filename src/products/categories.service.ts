@@ -29,7 +29,7 @@ export class CategoriesService {
     }
 
     findAll() {
-        return this.categoriesRepository.find();
+        return this.categoriesRepository.find({relations: ['account']});
     }
 
     findOne(id: number) {

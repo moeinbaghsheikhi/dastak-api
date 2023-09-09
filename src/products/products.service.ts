@@ -38,11 +38,11 @@ export class ProductsService {
   }
 
   findAll() {
-    return this.productsRepository.find({ relations: ['category'] })
+    return this.productsRepository.find({ relations: ['category', 'account'] })
   }
 
   findOne(id: number) {
-    return this.productsRepository.findOne({ relations: ['category'], where: { id } });
+    return this.productsRepository.findOne({ relations: ['category', 'account'], where: { id } });
   }
 
   update(id: number, updateProductsDto: UpdateProductsDto) {

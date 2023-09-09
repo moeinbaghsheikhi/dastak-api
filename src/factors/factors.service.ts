@@ -32,7 +32,7 @@ export class FactorsService {
 
   // بازیابی تمامی فاکتورها
   findAll() {
-    return this.factorsRepository.find({relations: ['factor_items']});
+    return this.factorsRepository.find({relations: ['factor_items', 'account']});
   }
 
   // بازیابی یک فاکتور با شناسه مشخص
