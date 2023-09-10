@@ -6,6 +6,7 @@ import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import ResponseFormat from 'src/utils/Addons/response-formats';
 import { LoginDto } from './dto/login-account.dto';
 import { otpnData } from './dto/otp-account.dto';
+import * as bcrypt from 'bcrypt'
 
 @Controller('account')
 @ApiTags('account')
@@ -50,9 +51,11 @@ export class AccountsController {
         return ResponseFormat(false, HttpStatus.BAD_REQUEST, "کاربری پیدا نشد!", null)
 
       const otp = await this.accountsService.otpsend(otpnData.mobile, otpCode)
-      data.password = otpCode
-      
-      await this.accountsService.update(data.id,{...data});
+      console.log(otpCode)
+      const password = await bcrypt.hash(otpCode, 10)
+      data.password = password
+
+      await this.accountsService.update(data.id, { ...data });
       return ResponseFormat(true, HttpStatus.OK, "پیامک با موفقیت ارسال شد", data)
     }
     catch (error) {
@@ -79,6 +82,11 @@ export class AccountsController {
   @Patch(':id')
   async update(@Param('id') id: string, @Body() updateAccountDto: UpdateAccountDto) {
     try {
+      const account = this.accountsService.findOne(+id)
+      if (!account)
+        return ResponseFormat(false, HttpStatus.NOT_FOUND, "NOT_FOUND", null)
+
+      updateAccountDto.password = await bcrypt.hash(updateAccountDto.password, 10)
       const data = await this.accountsService.update(+id, updateAccountDto);
       return ResponseFormat(true, HttpStatus.OK, "OK", data)
     } catch (error) {
@@ -92,5 +100,10 @@ export class AccountsController {
     if (data)
       return ResponseFormat(false, HttpStatus.NOT_FOUND, "NOT-FOUND", null)
     return ResponseFormat(true, HttpStatus.OK, "OK", data)
+  }
+
+  @Get('token')
+  async getToken(){
+    
   }
 }

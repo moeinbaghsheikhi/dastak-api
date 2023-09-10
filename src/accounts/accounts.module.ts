@@ -6,10 +6,17 @@ import { Accounts } from './entities/account.entity';
 import { Products } from 'src/products/entities/products.entity';
 import { Categories } from 'src/products/entities/categories.entity';
 import { HttpModule } from '@nestjs/axios';
-
+import { JwtModule } from '@nestjs/jwt/dist';
+import { jwtStrategy } from 'src/strategies/jwt.strategy';
 @Module({
-  imports: [TypeOrmModule.forFeature([Accounts, Products, Categories]), HttpModule],
+  imports: [
+    JwtModule.register({
+      secret: 'secret',
+      signOptions: { expiresIn: '30d' }
+
+    }),
+    TypeOrmModule.forFeature([Accounts, Products, Categories]), HttpModule],
   controllers: [AccountsController],
-  providers: [AccountsService],
+  providers: [AccountsService, jwtStrategy],
 })
-export class AccountsModule {}
+export class AccountsModule { }

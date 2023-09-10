@@ -5,21 +5,24 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Accounts } from 'src/accounts/entities/account.entity';
 import { Repository } from 'typeorm';
 import { Factors } from './entities/factors.entity';
+import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class FactorsService {
   constructor(
     @InjectRepository(Accounts) private accountRepository: Repository<Accounts>,
-    @InjectRepository(Factors) private factorsRepository: Repository<Factors>
+    @InjectRepository(Factors) private factorsRepository: Repository<Factors>,
+    private readonly jwtService: JwtService
+
   ) { }
 
   // ایجاد یک فاکتور جدید
-  async create(createFactorDto: CreateFactoresDto, code: string) {
+  async create(token: string, createFactorDto: CreateFactoresDto, code: string) {
     // یافتن حساب متناظر با شناسه
     const account = await this.accountRepository.findOneBy({ id: createFactorDto.account_id });
 
     // بررسی وجود حساب
-    if (!account)
+    if (!account)  
       return;
 
     // ایجاد یک فاکتور جدید با استفاده از داده‌های دریافتی
@@ -31,6 +34,9 @@ export class FactorsService {
 
     // ذخیره فاکتور جدید در دیتابیس
     return this.factorsRepository.save(newFactor);
+    // const a = token.substr(7)
+    // const test = this.jwtService.verify(a)
+    // console.log(test)
   }
 
   // بازیابی تمامی فاکتورها

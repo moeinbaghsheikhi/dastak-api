@@ -1,9 +1,11 @@
-import { Controller, Get, Post, Body, Put, Param, Delete, HttpStatus, Patch } from '@nestjs/common';
+import { Controller, Get, Post, Body, Header, Put, Param, Delete, HttpStatus, Patch } from '@nestjs/common';
 import { FactorsService } from './factors.service';
 import { CreateFactoresDto } from './dto/create-factores.dto';
 import { UpdateFactoresDto } from './dto/update-factores.dto';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import ResponseFormat from 'src/utils/Addons/response-formats';
+import { JwtTokenGuard } from 'src/jwt-token/jwt-token.guard';
+import { Headers, UseGuards } from '@nestjs/common/decorators';
 
 @Controller('factors')
 @ApiTags('factors')
@@ -12,10 +14,11 @@ export class FactorsController {
 
   // ایجاد یک فاکتور جدید
   @Post()
-  async create(@Body() createFactorDto: CreateFactoresDto) {
+  @UseGuards(JwtTokenGuard)
+  async create(@Headers('authorization') token: string, @Body() createFactorDto: CreateFactoresDto) {
     try {
       const code = await this.factorsService.findByCode()
-      const data = await this.factorsService.create(createFactorDto, code);
+      const data = await this.factorsService.create(token, createFactorDto, code);
 
       if (data == null)
         return ResponseFormat(false, HttpStatus.BAD_REQUEST, "Account Not Found", null)
