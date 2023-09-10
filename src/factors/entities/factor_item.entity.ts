@@ -8,7 +8,6 @@ export class Factor_items {
     id: number
 
     @ManyToOne(() => Products)
-    @JoinColumn()
     product: Products
 
     @ManyToOne(() => Factors)
