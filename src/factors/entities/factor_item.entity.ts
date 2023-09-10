@@ -11,7 +11,7 @@ export class Factor_items {
     @JoinColumn()
     product: Products
 
-    @ManyToOne(() => Factors, (factors) => factors.factor_items)
+    @ManyToOne(() => Factors)
     factor: Factors;
 
     @CreateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP'})
