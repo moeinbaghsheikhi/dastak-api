@@ -6,10 +6,10 @@ import { Factors } from "./factors.entity";
 export class Factor_items {
     @PrimaryGeneratedColumn()
     id: number
-
-    @OneToOne(() => Products)
+    
+    @OneToMany(() => Products, (product) => product.factors_items)
     @JoinColumn()
-    product: Products
+    product: Products[];
 
     @ManyToOne(() => Factors, (factors) => factors.factor_items)
     factor: Factors;
