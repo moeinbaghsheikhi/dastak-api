@@ -19,10 +19,11 @@ export class FactorsService {
   // ایجاد یک فاکتور جدید
   async create(token: string, createFactorDto: CreateFactoresDto, code: string) {
     // یافتن حساب متناظر با شناسه
-    const account = await this.accountRepository.findOneBy({ id: createFactorDto.account_id });
+    const accountToken = await this.jwtService.verify(token.substr(7))
+    const account = await this.accountRepository.findOneBy({ id: accountToken.account_id });
 
     // بررسی وجود حساب
-    if (!account)  
+    if (!account)
       return;
 
     // ایجاد یک فاکتور جدید با استفاده از داده‌های دریافتی
@@ -35,7 +36,7 @@ export class FactorsService {
     // ذخیره فاکتور جدید در دیتابیس
     return this.factorsRepository.save(newFactor);
     // const a = token.substr(7)
-    // const test = this.jwtService.verify(a)
+    // const test = await this.jwtService.verify(a)
     // console.log(test)
   }
 

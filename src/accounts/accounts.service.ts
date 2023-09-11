@@ -54,6 +54,7 @@ export class AccountsService {
     if (isPassword)
       return this.jwtService.sign({
         account_id: account.id,
+        name: account.name,
         mobile: account.mobile,
         password: account.password
       })
