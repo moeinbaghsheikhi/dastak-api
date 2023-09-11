@@ -8,18 +8,22 @@ import { Accounts } from 'src/accounts/entities/account.entity';
 import { Categories } from './entities/categories.entity';
 import { CreateCategoriesDto } from './dto/create-categories.dto';
 import { UpdateCategoriesDto } from './dto/update-categories.dto';
+import { JwtService } from '@nestjs/jwt';
 
 
 @Injectable()
 export class CategoriesService {
     constructor(
         @InjectRepository(Categories) private categoriesRepository: Repository<Categories>,
-        @InjectRepository(Accounts) private accountRepository: Repository<Accounts>
+        @InjectRepository(Accounts) private accountRepository: Repository<Accounts>,
+        private readonly jwtService: JwtService
+
     ) { }
 
 
-    async create(createCategoriesDto: CreateCategoriesDto) {
-        const account = await this.accountRepository.findOneBy({ id: createCategoriesDto.account_id })
+    async create(token: string, createCategoriesDto: CreateCategoriesDto) {
+        const accountToken = await this.jwtService.verify(token.substr(7))
+        const account = await this.accountRepository.findOneBy({ id: accountToken.account_id })
         console.log(account)
         if (!account)
             throw new HttpException('Account Not Found', HttpStatus.BAD_REQUEST)
@@ -29,7 +33,7 @@ export class CategoriesService {
     }
 
     findAll() {
-        return this.categoriesRepository.find({relations: ['account']});
+        return this.categoriesRepository.find({ relations: ['account'] });
     }
 
     findOne(id: number) {

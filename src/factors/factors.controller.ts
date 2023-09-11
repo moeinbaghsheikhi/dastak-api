@@ -2,7 +2,7 @@ import { Controller, Get, Post, Body, Header, Put, Param, Delete, HttpStatus, Pa
 import { FactorsService } from './factors.service';
 import { CreateFactoresDto } from './dto/create-factores.dto';
 import { UpdateFactoresDto } from './dto/update-factores.dto';
-import { ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
 import ResponseFormat from 'src/utils/Addons/response-formats';
 import { JwtTokenGuard } from 'src/jwt-token/jwt-token.guard';
 import { Headers, UseGuards } from '@nestjs/common/decorators';
@@ -14,10 +14,11 @@ export class FactorsController {
 
   // ایجاد یک فاکتور جدید
   @Post()
+  @ApiBearerAuth()
   @UseGuards(JwtTokenGuard)
   async create(@Headers('authorization') token: string, @Body() createFactorDto: CreateFactoresDto) {
     try {
-      const code = await this.factorsService.makeCode()
+      const code = await this.factorsService.findByCode()
       const data = await this.factorsService.create(token, createFactorDto, code);
 
       if (data == null)
@@ -31,6 +32,8 @@ export class FactorsController {
   }
 
   // بازیابی تمامی فاکتورها
+  @ApiBearerAuth()
+  @UseGuards(JwtTokenGuard)
   @Get()
   async findAll() {
     const data = await this.factorsService.findAll();
@@ -39,9 +42,11 @@ export class FactorsController {
   }
 
   // بازیابی یک فاکتور با شناسه مشخص
-  @Get(':code')
-  async findOne(@Param('code') code: string) {
-    const data = await this.factorsService.findOne(code);
+  @ApiBearerAuth()
+  @UseGuards(JwtTokenGuard)
+  @Get(':id')
+  async findOne(@Param('id') id: string) {
+    const data = await this.factorsService.findOne(+id);
     if (!data)
       return ResponseFormat(false, HttpStatus.NOT_FOUND, "NOT-FOUND", null)
 
@@ -49,6 +54,8 @@ export class FactorsController {
   }
 
   // به‌روزرسانی یک فاکتور با شناسه مشخص
+  @ApiBearerAuth()
+  @UseGuards(JwtTokenGuard)
   @Patch(':id')
   async update(@Param('id') id: string, @Body() updateFactorDto: UpdateFactoresDto) {
     try {
@@ -61,6 +68,8 @@ export class FactorsController {
   }
 
   // حذف یک فاکتور با شناسه مشخص
+  @ApiBearerAuth()
+  @UseGuards(JwtTokenGuard)
   @Delete(':id')
   async remove(@Param('id') id: string) {
     const data = await this.factorsService.remove(+id);

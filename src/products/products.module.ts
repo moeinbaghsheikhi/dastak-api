@@ -7,10 +7,17 @@ import { Categories } from './entities/categories.entity';
 import { Accounts } from 'src/accounts/entities/account.entity';
 import { CategoriesController } from './categories.controller';
 import { CategoriesService } from './categories.service';
+import { JwtModule } from '@nestjs/jwt';
+import { jwtStrategy } from 'src/strategies/jwt.strategy';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Products, Categories, Accounts])],
+  imports: [
+    JwtModule.register({
+      secret: 'secret',
+      signOptions: { expiresIn: '30d' }
+    }),
+     TypeOrmModule.forFeature([Products, Categories, Accounts])],
   controllers: [ProductsController, CategoriesController],
-  providers: [ProductsService, CategoriesService],
+  providers: [ProductsService, CategoriesService, jwtStrategy],
 })
 export class ProductsModule { }

@@ -3,14 +3,6 @@ import { IsInt, IsString, IsNotEmpty, IsNumber, IsOptional, MaxLength, Min, IsPo
 
 export class CreateProductsDto {
     @ApiProperty({
-        description: 'شناسه حساب',
-        example: '1',
-    })
-    @IsInt({ message: 'شناسه حساب باید یک عدد صحیح باشد' })
-    @IsPositive({ message: 'شناسه حساب باید مقدار مثبت داشته باشد' })
-    account_id: number;
-
-    @ApiProperty({
         description: 'شناسه دسته‌بندی',
         example: '2',
     })

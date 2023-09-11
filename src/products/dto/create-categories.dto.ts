@@ -3,13 +3,6 @@ import { ApiProperty } from '@nestjs/swagger';
 
 export class CreateCategoriesDto {
     @ApiProperty({
-        description: 'شناسه حساب',
-        example: '1',
-    })
-    @IsInt({ message: 'شناسه حساب باید یک عدد صحیح باشد' })
-    @IsPositive({ message: 'شناسه حساب باید مقدار مثبت داشته باشد' }) account_id: number;
-
-    @ApiProperty({
         description: 'توضیحات موردنیاز برای عنوان دسته‌بندی',
         example: 'دسته‌بندی جدید'
     })
