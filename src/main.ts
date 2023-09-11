@@ -11,7 +11,7 @@ async function bootstrap() {
   app.useGlobalPipes(new ValidationPipe());
 
   app.use(session({
-    secret: 'secret',
+    secret: process.env.SECRET,
     // singOptions: { expiresIn: '30d' }
   }))
   app.use(passport.initialize())

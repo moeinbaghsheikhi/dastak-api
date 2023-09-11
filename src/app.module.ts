@@ -8,6 +8,7 @@ import { Factors } from './factors/entities/factors.entity';
 import { Factor_items } from './factors/entities/factor_item.entity';
 import { Categories } from './products/entities/categories.entity';
 import { Products } from './products/entities/products.entity';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { Products } from './products/entities/products.entity';
       entities: [Accounts, Factors, Factor_items, Categories, Products],
       synchronize: true
     }),
+    ConfigModule.forRoot(),
     AccountsModule,
     FactorsModule,
     ProductsModule,
