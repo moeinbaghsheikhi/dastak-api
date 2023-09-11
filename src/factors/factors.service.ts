@@ -42,6 +42,7 @@ export class FactorsService {
   async findOne(code: string) {
     // return this.factorsRepository.findOne({ relations: ['factor_items'], where: {id} });
     return this.factorsRepository.createQueryBuilder('factor')
+      .leftJoinAndSelect('factor.account', 'account')
       .leftJoinAndSelect('factor.factor_items', 'factor_items')
       .leftJoinAndSelect('factor_items.product', 'products')
       .where('factor.code = :code', { code })
