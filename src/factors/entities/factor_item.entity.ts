@@ -7,8 +7,7 @@ export class Factor_items {
     @PrimaryGeneratedColumn()
     id: number
 
-    @OneToOne(() => Products)
-    @JoinColumn()
+    @ManyToOne(() => Products)
     product: Products
 
     @ManyToOne(() => Factors, (factors) => factors.factor_items)
