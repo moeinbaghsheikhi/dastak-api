@@ -38,7 +38,7 @@ export class FactorsController {
   // بازیابی یک فاکتور با شناسه مشخص
   @Get(':code')
   async findOne(@Param('code') code: string) {
-    const data = await this.factorsService.findOne(+code);
+    const data = await this.factorsService.findOne(code);
     if (!data)
       return ResponseFormat(false, HttpStatus.NOT_FOUND, "NOT-FOUND", null)
 
