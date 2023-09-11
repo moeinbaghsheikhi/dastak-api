@@ -1,7 +1,8 @@
-import { ApiProperty } from "@nestjs/swagger"
+import { ApiHeader, ApiProperty } from "@nestjs/swagger"
 import { IsMobilePhone, IsNotEmpty, IsString, MaxLength } from "class-validator";
+import { ExtractJwt } from "passport-jwt";
 
-export class UpdateAccountDto{
+export class UpdateAccountDto {
     @ApiProperty({
         description: 'نام حساب',
         example: 'Reza',

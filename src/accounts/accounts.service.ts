@@ -27,20 +27,28 @@ export class AccountsService {
     return this.accountRepository.find();
   }
 
-  findOne(id: number) {
-    return this.accountRepository.findOneBy({ id });
+  async findOne(token: string) {
+    const accountToken = await this.jwtService.verify(token.substr(7))
+    return this.accountRepository.findOneBy({ id: accountToken.account_id });
   }
 
   findOneByMobile(mobile: string) {
     return this.accountRepository.findOneBy({ mobile });
   }
 
-  async update(id: number, updateAccountDto: UpdateAccountDto) {
+  async updateOtp(id: number, updateAccountDto: UpdateAccountDto) {
     return this.accountRepository.update({ id }, { ...updateAccountDto });
   }
 
-  remove(id: number) {
-    return this.accountRepository.delete(id);
+  async update(token: string, updateAccountDto: UpdateAccountDto) {
+    const accountToken = await this.jwtService.verify(token.substr(7))
+    return this.accountRepository.update({ id: accountToken.account_id }, { ...updateAccountDto });
+  }
+
+  async remove(token: string) {
+    const accountToken = await this.jwtService.verify(token.substr(7))
+    console.log(accountToken)
+    return 'this.accountRepository.delete(accountToken.account_id);'
   }
 
   findByMobile(mobile: string) {

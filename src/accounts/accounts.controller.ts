@@ -1,12 +1,17 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, HttpStatus } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, HttpStatus, UseGuards } from '@nestjs/common';
 import { AccountsService } from './accounts.service';
+import { Header, Req, Request, Response } from '@nestjs/common/decorators';
 import { CreateAccountDto } from './dto/create-account.dto';
 import { UpdateAccountDto } from './dto/update-account.dto';
-import { ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiHeader, ApiHeaderOptions, ApiHeaders, ApiResponse, ApiTags } from '@nestjs/swagger';
 import ResponseFormat from 'src/utils/Addons/response-formats';
 import { LoginDto } from './dto/login-account.dto';
 import { otpnData } from './dto/otp-account.dto';
 import * as bcrypt from 'bcrypt'
+import { JwtTokenGuard } from 'src/jwt-token/jwt-token.guard';
+import { ExtractJwt } from 'passport-jwt';
+import { type } from 'os';
+import { Headers } from '@nestjs/common/decorators';
 
 @Controller('account')
 @ApiTags('account')
@@ -55,7 +60,7 @@ export class AccountsController {
       const password = await bcrypt.hash(otpCode, 10)
       data.password = password
 
-      await this.accountsService.update(data.id, { ...data });
+      await this.accountsService.updateOtp(data.id, { ...data });
       return ResponseFormat(true, HttpStatus.OK, "پیامک با موفقیت ارسال شد", data)
     }
     catch (error) {
@@ -63,6 +68,8 @@ export class AccountsController {
     }
   }
 
+  @ApiBearerAuth()
+  @UseGuards(JwtTokenGuard)
   @Get()
   async findAll() {
     const data = await this.accountsService.findAll()
@@ -70,40 +77,41 @@ export class AccountsController {
     return ResponseFormat(true, HttpStatus.OK, "OK", data)
   }
 
-  @Get(':id')
-  async findOne(@Param('id') id: string) {
-    const data = await this.accountsService.findOne(+id);
+  @ApiBearerAuth()
+  @UseGuards(JwtTokenGuard)
+  @Get('account_profile')
+  async findOne(id: string) {
+    const data = await this.accountsService.findOne(id);
     if (!data)
       return ResponseFormat(false, HttpStatus.NOT_FOUND, "NOT-FOUND", null)
     return ResponseFormat(true, HttpStatus.OK, "OK", data)
 
   }
 
-  @Patch(':id')
-  async update(@Param('id') id: string, @Body() updateAccountDto: UpdateAccountDto) {
+  @ApiBearerAuth()
+  @UseGuards(JwtTokenGuard)
+  @Patch()
+  async update(@Headers('authorization') token: string, @Body() updateAccountDto: UpdateAccountDto) {
     try {
-      const account = this.accountsService.findOne(+id)
+      const account = this.accountsService.findOne(token)
       if (!account)
         return ResponseFormat(false, HttpStatus.NOT_FOUND, "NOT_FOUND", null)
 
       updateAccountDto.password = await bcrypt.hash(updateAccountDto.password, 10)
-      const data = await this.accountsService.update(+id, updateAccountDto);
+      const data = await this.accountsService.update(token, updateAccountDto);
       return ResponseFormat(true, HttpStatus.OK, "OK", data)
     } catch (error) {
       return ResponseFormat(false, 500, "SERVER-ERROR", null);
     }
   }
 
-  @Delete(':id')
-  async remove(@Param('id') id: string) {
-    const data = await this.accountsService.remove(+id);
+  @ApiBearerAuth()
+  @UseGuards(JwtTokenGuard)
+  @Delete()
+  async remove(@Headers('authorization') token: string) {
+    const data = await this.accountsService.remove(token);
     if (data)
       return ResponseFormat(false, HttpStatus.NOT_FOUND, "NOT-FOUND", null)
     return ResponseFormat(true, HttpStatus.OK, "OK", data)
-  }
-
-  @Get('token')
-  async getToken(){
-    
   }
 }
