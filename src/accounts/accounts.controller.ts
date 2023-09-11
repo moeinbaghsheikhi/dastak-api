@@ -80,8 +80,8 @@ export class AccountsController {
   @ApiBearerAuth()
   @UseGuards(JwtTokenGuard)
   @Get('account_profile')
-  async findOne(id: string) {
-    const data = await this.accountsService.findOne(id);
+  async findOne(@Headers('authorization') token: string) {
+    const data = await this.accountsService.findOne(token);
     if (!data)
       return ResponseFormat(false, HttpStatus.NOT_FOUND, "NOT-FOUND", null)
     return ResponseFormat(true, HttpStatus.OK, "OK", data)

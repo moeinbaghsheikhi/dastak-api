@@ -13,7 +13,7 @@ import { jwtStrategy } from 'src/strategies/jwt.strategy';
 @Module({
   imports: [
     JwtModule.register({
-      secret: process.env.SECRET,
+      secret: 'secret' ,
       signOptions: { expiresIn: '30d' }
     }),
      TypeOrmModule.forFeature([Products, Categories, Accounts])],

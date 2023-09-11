@@ -8,10 +8,11 @@ import { Categories } from 'src/products/entities/categories.entity';
 import { HttpModule } from '@nestjs/axios';
 import { JwtModule } from '@nestjs/jwt/dist';
 import { jwtStrategy } from 'src/strategies/jwt.strategy';
+import { env } from 'process';
 @Module({
   imports: [
     JwtModule.register({
-      secret: process.env.SECRET,
+      secret: 'secret' ,
       signOptions: { expiresIn: '30d' }
 
     }),
