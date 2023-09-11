@@ -39,7 +39,7 @@ export class FactorsService {
   }
 
   // بازیابی یک فاکتور با شناسه مشخص
-  async findOne(code: number) {
+  async findOne(code: string) {
     // return this.factorsRepository.findOne({ relations: ['factor_items'], where: {id} });
     return this.factorsRepository.createQueryBuilder('factor')
       .leftJoinAndSelect('factor.factor_items', 'factor_items')
