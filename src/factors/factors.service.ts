@@ -39,12 +39,12 @@ export class FactorsService {
   }
 
   // بازیابی یک فاکتور با شناسه مشخص
-  async findOne(id: number) {
+  async findOne(code: number) {
     // return this.factorsRepository.findOne({ relations: ['factor_items'], where: {id} });
     return this.factorsRepository.createQueryBuilder('factor')
       .leftJoinAndSelect('factor.factor_items', 'factor_items')
       .leftJoinAndSelect('factor_items.product', 'products')
-      .where('factor.id = :id', { id })
+      .where('factor.code = :code', { code })
       .getOne();
 
   }
@@ -59,7 +59,7 @@ export class FactorsService {
     return this.factorsRepository.delete(id);
   }
 
-  async findByCode() {
+  async makeCode() {
     let result = '';
     const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
     const charactersLength = characters.length;

@@ -14,7 +14,7 @@ export class FactorsController {
   @Post()
   async create(@Body() createFactorDto: CreateFactoresDto) {
     try {
-      const code = await this.factorsService.findByCode()
+      const code = await this.factorsService.makeCode()
       const data = await this.factorsService.create(createFactorDto, code);
 
       if (data == null)
@@ -37,8 +37,8 @@ export class FactorsController {
 
   // بازیابی یک فاکتور با شناسه مشخص
   @Get(':id')
-  async findOne(@Param('id') id: string) {
-    const data = await this.factorsService.findOne(+id);
+  async findOne(@Param('code') code: string) {
+    const data = await this.factorsService.findOne(+code);
     if (!data)
       return ResponseFormat(false, HttpStatus.NOT_FOUND, "NOT-FOUND", null)
 
