@@ -32,8 +32,10 @@ export class AccountsController {
         createAccountDto.password = password
       }
 
-      const data = await this.accountsService.create(createAccountDto);
-      return ResponseFormat(true, HttpStatus.CREATED, "CREATED", data)
+      await this.accountsService.create(createAccountDto);
+
+      const loginData = await this.accountsService.login(createAccountDto.mobile, createAccountDto.password)
+      return ResponseFormat(true, HttpStatus.CREATED, "CREATED", loginData)
     }
     catch (error) {
       return ResponseFormat(false, 500, "SERVER-ERROR", null);
