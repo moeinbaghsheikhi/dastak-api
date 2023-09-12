@@ -31,8 +31,7 @@ export class AccountsController {
       const account = await this.accountsService.findByMobile(createAccountDto.mobile)
       if (account)
         return ResponseFormat(false, HttpStatus.BAD_REQUEST, "Mobile Already Exists", null)
-      if(!createAccountDto.password)
-      {
+      if (!createAccountDto.password) {
         await this.accountsService.otpsend(createAccountDto.mobile, otpCode)
         const password = await bcrypt.hash(otpCode, 10)
         createAccountDto.password = password
@@ -40,10 +39,8 @@ export class AccountsController {
 
       const wallet = await this.walletService.create(createAccountDto.mobile, createAccountDto);
       const data = await this.accountsService.create(wallet, createAccountDto);
-      return ResponseFormat(true, HttpStatus.CREATED, "CREATED", data)
-      await this.accountsService.create(createAccountDto);
-
       const loginData = await this.accountsService.login(createAccountDto.mobile, createAccountDto.password)
+      
       return ResponseFormat(true, HttpStatus.CREATED, "CREATED", loginData)
     }
     catch (error) {
