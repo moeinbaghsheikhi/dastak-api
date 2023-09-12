@@ -59,13 +59,16 @@ export class AccountsService {
     const account = await this.accountRepository.findOne({ where: { mobile: mobile } })
     const isPassword = await bcrypt.compare(password, account.password)
 
-    if (isPassword)
-      return this.jwtService.sign({
+    if (isPassword){
+      const token = this.jwtService.sign({
         account_id: account.id,
         name: account.name,
         mobile: account.mobile,
         password: account.password
       })
+
+      return {...account, token}
+    }
     return null
   }
 
