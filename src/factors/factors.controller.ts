@@ -42,8 +42,8 @@ export class FactorsController {
   }
 
   // بازیابی یک فاکتور با شناسه مشخص
-  @ApiBearerAuth()
-  @UseGuards(JwtTokenGuard)
+  // @ApiBearerAuth()
+  // @UseGuards(JwtTokenGuard)
   @Get(':code')
   async findOne(@Param('code') code: string) {
     const data = await this.factorsService.findOne(code);
