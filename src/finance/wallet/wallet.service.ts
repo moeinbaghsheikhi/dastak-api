@@ -17,9 +17,9 @@ export class WalletService {
   ) { }
 
 
-  async create(mobile: string, createWalletDto: CreateWalletDto) {
+  async create(mobile: string) {
     const wallet = this.walletRepository.create({
-      ...createWalletDto,
+      amount: 0,
       accounts_mobile: mobile,
 
     })

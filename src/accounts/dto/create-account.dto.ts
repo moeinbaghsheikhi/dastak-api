@@ -40,7 +40,4 @@ export class CreateAccountDto {
         example: '1234'
     })
     password: string;
-
-    @ApiProperty()
-    amount: number
 }
