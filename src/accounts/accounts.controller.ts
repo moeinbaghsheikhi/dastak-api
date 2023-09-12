@@ -12,20 +12,28 @@ import { JwtTokenGuard } from 'src/jwt-token/jwt-token.guard';
 import { ExtractJwt } from 'passport-jwt';
 import { type } from 'os';
 import { Headers } from '@nestjs/common/decorators';
+import { WalletService } from 'src/finance/wallet/wallet.service';
+import { async } from 'rxjs';
+import { CreateWalletDto } from 'src/finance/wallet/dto/create-wallet.dto';
 
 @Controller('account')
 @ApiTags('account')
 export class AccountsController {
-  constructor(private readonly accountsService: AccountsService) { }
+  constructor(
+    private readonly walletService: WalletService,
+    private readonly accountsService: AccountsService
+  ) { }
 
   @Post()
-  async create(@Body() createAccountDto: CreateAccountDto) {
+  async create(
+    @Body() createAccountDto: CreateAccountDto) {
     try {
-      const mobile = await this.accountsService.findByMobile(createAccountDto.mobile)
-      if (mobile)
+      const account = await this.accountsService.findByMobile(createAccountDto.mobile)
+      if (account)
         return ResponseFormat(false, HttpStatus.BAD_REQUEST, "Mobile Already Exists", null)
 
-      const data = await this.accountsService.create(createAccountDto);
+      const wallet = await this.walletService.create(createAccountDto.mobile, createAccountDto);
+      const data = await this.accountsService.create(wallet, createAccountDto);
       return ResponseFormat(true, HttpStatus.CREATED, "CREATED", data)
     }
     catch (error) {

@@ -7,24 +7,46 @@ import { Repository } from 'typeorm';
 import { HttpService } from '@nestjs/axios';
 import * as bcrypt from 'bcrypt'
 import { JwtService } from '@nestjs/jwt';
+import { Wallet } from 'src/finance/wallet/entities/wallet.entity';
 
 
 @Injectable()
 export class AccountsService {
   constructor(
-    @InjectRepository(Accounts) private accountRepository: Repository<Accounts>, private readonly httpService: HttpService,
-    private readonly jwtService: JwtService
+    @InjectRepository(Accounts) private accountRepository: Repository<Accounts>,
+    @InjectRepository(Wallet) private walletRepository: Repository<Wallet>,
+    private readonly httpService: HttpService,
+    private readonly jwtService: JwtService,
   ) { }
 
 
-  async create(createAccountDto: CreateAccountDto) {
+  async create(wallet, createAccountDto: CreateAccountDto) {
+
     createAccountDto.password = await bcrypt.hash(createAccountDto.password, 10)
-    const account = this.accountRepository.create({ ...createAccountDto })
+    const account = this.accountRepository.create({
+      ...createAccountDto,
+      wallets: wallet
+    })
     return this.accountRepository.save(account)
   }
 
-  findAll() {
-    return this.accountRepository.find();
+  async findAll() {
+    console.log(await this.accountRepository.find({
+      relations: ['wallets'],
+      order: {
+        id: {
+          direction: "ASC"
+        }
+      }
+    }))
+    return this.accountRepository.find({
+      relations: ['wallets'],
+      order: {
+        id: {
+          direction: "ASC"
+        }
+      }
+    });
   }
 
   async findOne(token: string) {
