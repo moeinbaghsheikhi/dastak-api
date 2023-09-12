@@ -25,16 +25,26 @@ export class AccountsController {
   ) { }
 
   @Post()
-  async create(
-    @Body() createAccountDto: CreateAccountDto) {
+  async create(@Body() createAccountDto: CreateAccountDto) {
+    const otpCode = (Math.floor(Math.random() * (9999 - 1000)) + 1000).toString();
     try {
       const account = await this.accountsService.findByMobile(createAccountDto.mobile)
       if (account)
         return ResponseFormat(false, HttpStatus.BAD_REQUEST, "Mobile Already Exists", null)
+      if(!createAccountDto.password)
+      {
+        await this.accountsService.otpsend(createAccountDto.mobile, otpCode)
+        const password = await bcrypt.hash(otpCode, 10)
+        createAccountDto.password = password
+      }
 
       const wallet = await this.walletService.create(createAccountDto.mobile, createAccountDto);
       const data = await this.accountsService.create(wallet, createAccountDto);
       return ResponseFormat(true, HttpStatus.CREATED, "CREATED", data)
+      await this.accountsService.create(createAccountDto);
+
+      const loginData = await this.accountsService.login(createAccountDto.mobile, createAccountDto.password)
+      return ResponseFormat(true, HttpStatus.CREATED, "CREATED", loginData)
     }
     catch (error) {
       return ResponseFormat(false, 500, "SERVER-ERROR", null);
