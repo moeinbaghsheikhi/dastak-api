@@ -20,10 +20,17 @@ export class AccountsController {
 
   @Post()
   async create(@Body() createAccountDto: CreateAccountDto) {
+    const otpCode = (Math.floor(Math.random() * (9999 - 1000)) + 1000).toString();
     try {
       const mobile = await this.accountsService.findByMobile(createAccountDto.mobile)
       if (mobile)
         return ResponseFormat(false, HttpStatus.BAD_REQUEST, "Mobile Already Exists", null)
+      if(!createAccountDto.password)
+      {
+        await this.accountsService.otpsend(createAccountDto.mobile, otpCode)
+        const password = await bcrypt.hash(otpCode, 10)
+        createAccountDto.password = password
+      }
 
       const data = await this.accountsService.create(createAccountDto);
       return ResponseFormat(true, HttpStatus.CREATED, "CREATED", data)
