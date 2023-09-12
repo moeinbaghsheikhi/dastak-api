@@ -81,33 +81,46 @@ export class AccountsService {
     const account = await this.accountRepository.findOne({ where: { mobile: mobile } })
     const isPassword = await bcrypt.compare(password, account.password)
 
-    if (isPassword)
-      return this.jwtService.sign({
+    if (isPassword){
+      const token = this.jwtService.sign({
         account_id: account.id,
         name: account.name,
         mobile: account.mobile,
         password: account.password
       })
+
+      return {...account, token}
+    }
     return null
   }
 
   async otpsend(mobile: string, code: string) {
-    var data = JSON.stringify({
-      from: '50004001882813',
-      to: mobile,
-      text: "رمز عبور جدید شما در دستک: " + code + "\n از این به بعد میتوانید با این کد 4 رقمی وارد حساب خود در دستک شوید.",
-    });
+    // var data = JSON.stringify({
+    //   from: '50004001882813',
+    //   to: mobile,
+    //   text: "رمز عبور جدید شما در دستک: " + code + "\n از این به بعد میتوانید با این کد 4 رقمی وارد حساب خود در دستک شوید.",
+    // });
 
-    const config = {
-      headers: {
-        'Content-Type': 'application/json',
-      },
+    // const config = {
+    //   headers: {
+    //     'Content-Type': 'application/json',
+    //   },
 
-    };
+    // };
 
-    try {
+    // try {
+    //   const response = await this.httpService
+    //     .post('http://api.payamak-panel.com/post/send.asmx', data, config)
+    //     .toPromise();
+    //   console.log(JSON.stringify(response.data));
+    // } catch (error) {
+    //   console.log(error);
+    // }
+
+    // Send by pattern
+      try {
       const response = await this.httpService
-        .post('https://console.melipayamak.com/api/send/simple/3cb7d173f4444f409640e09294adacc3', data, config)
+        .get('http://api.payamak-panel.com/post/Send.asmx/SendByBaseNumber3?username=09135882813&password=T13Y7&text=@161754@'+code+';&to='+mobile)
         .toPromise();
       console.log(JSON.stringify(response.data));
     } catch (error) {
