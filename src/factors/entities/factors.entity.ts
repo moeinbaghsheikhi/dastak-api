@@ -16,6 +16,33 @@ export class Factors {
     @Column({ type: "bigint" })
     status: number
 
+    @Column({ nullable: true })
+    shoper_name: string
+
+    @Column({ nullable: true })
+    shoper_mobile: string
+
+    @Column({ nullable: true })
+    province: string
+
+    @Column({ nullable: true })
+    city: string
+
+    @Column({ nullable: true })
+    postal_code: string
+
+    @Column({ nullable: true })
+    tracking_code: string
+
+    @Column({ nullable: true })
+    payment_type: string
+
+    @Column({ nullable: true })
+    image: string
+
+    @Column({ nullable: true })
+    final_price: number
+
     @ManyToOne(() => Accounts, (accounts) => accounts.factors)
     account: Accounts;
 
@@ -23,9 +50,9 @@ export class Factors {
     @JoinColumn()
     factor_items: Factor_items[];
 
-    @CreateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP'})
+    @CreateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
     createdAt: Date;
-  
+
     @UpdateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP', onUpdate: 'CURRENT_TIMESTAMP' })
     updatedAt: Date;
 

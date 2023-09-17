@@ -6,7 +6,6 @@ import { Accounts } from 'src/accounts/entities/account.entity';
 import { Repository } from 'typeorm';
 import { Factors } from './entities/factors.entity';
 import { JwtService } from '@nestjs/jwt';
-import { UpdateFactoreFillDto } from './dto/update-factores_fill.dto';
 
 @Injectable()
 export class FactorsService {
@@ -36,6 +35,9 @@ export class FactorsService {
 
     // ذخیره فاکتور جدید در دیتابیس
     return this.factorsRepository.save(newFactor);
+    // const a = token.substr(7)
+    // const test = await this.jwtService.verify(a)
+    // console.log(test)
   }
 
   // بازیابی تمامی فاکتورها
@@ -58,10 +60,6 @@ export class FactorsService {
   // به‌روزرسانی یک فاکتور با شناسه مشخص
   update(id: number, updateFactorDto: UpdateFactoresDto) {
     return this.factorsRepository.update({ id }, { ...updateFactorDto });
-  }
-
-  updateFactoreFill(id: number, UpdateFactoreFillDto: UpdateFactoreFillDto) {
-    return this.factorsRepository.update({ id }, { ...UpdateFactoreFillDto });
   }
 
   // حذف یک فاکتور با شناسه مشخص

@@ -6,7 +6,6 @@ import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
 import ResponseFormat from 'src/utils/Addons/response-formats';
 import { JwtTokenGuard } from 'src/jwt-token/jwt-token.guard';
 import { Headers, UseGuards } from '@nestjs/common/decorators';
-import { UpdateFactoreFillDto } from './dto/update-factores_fill.dto';
 
 @Controller('factors')
 @ApiTags('factors')
@@ -43,8 +42,8 @@ export class FactorsController {
   }
 
   // بازیابی یک فاکتور با شناسه مشخص
-  @ApiBearerAuth()
-  @UseGuards(JwtTokenGuard)
+  // @ApiBearerAuth()
+  // @UseGuards(JwtTokenGuard)
   @Get(':code')
   async findOne(@Param('code') code: string) {
     const data = await this.factorsService.findOne(code);
@@ -65,18 +64,7 @@ export class FactorsController {
     } catch (error) {
       return ResponseFormat(false, 500, "SERVER-ERROR", null);
     }
-  }
 
-  @ApiBearerAuth()
-  @UseGuards(JwtTokenGuard)
-  @Patch('fill/:id')
-  async updateFactoreFill(@Param('id') id: string, @Body() updateFactoreFillDto: UpdateFactoreFillDto) {
-    try {
-      const data = await this.factorsService.updateFactoreFill(+id, updateFactoreFillDto);
-      return ResponseFormat(true, HttpStatus.OK, "OK", data)
-    } catch (error) {
-      return ResponseFormat(false, 500, "SERVER-ERROR", null);
-    }
   }
 
   // حذف یک فاکتور با شناسه مشخص
