@@ -40,8 +40,10 @@ export class CategoriesService {
         return this.categoriesRepository.findOneBy({ id })
     }
 
-    update(id: number, updateCategoriesDto: UpdateCategoriesDto) {
-        return this.categoriesRepository.update({ id }, { ...updateCategoriesDto })
+    async update(token: string, id: number, updateCategoriesDto: UpdateCategoriesDto) {
+        const accountToken = await this.jwtService.verify(token.substr(7))
+        const account = await this.accountRepository.findOneBy({ id: accountToken.account_id })
+        return this.categoriesRepository.update({ id }, { ...updateCategoriesDto, account })
     }
 
     remove(id: number) {
