@@ -35,7 +35,7 @@ export class ProductsService {
     const newProduct = this.productsRepository.create({
       ...createProductsDto,
       account,
-      category
+      categories_id:category
     })
     return await this.productsRepository.save(newProduct)
   }

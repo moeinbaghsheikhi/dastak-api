@@ -14,6 +14,6 @@ export class Categories {
     @JoinColumn()
     account: Accounts;
 
-    @OneToMany(() => Products, (product) => product.category)
+    @OneToMany(() => Products, (product) => product.categories_id)
     products: Products;
 }
