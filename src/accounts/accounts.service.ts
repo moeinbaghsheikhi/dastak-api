@@ -46,6 +46,7 @@ export class AccountsService {
     return this.accountRepository.createQueryBuilder('accounts')
       .leftJoinAndSelect('accounts.wallets', 'wallet')
       .leftJoinAndSelect('wallet.bankAccounts', 'BankAccounts')
+      .leftJoinAndSelect('wallet.transactions', 'transaction')
       .where('accounts.id = :id', { id })
       .getOne();
     // return this.accountRepository.find({relations:['wallets']})

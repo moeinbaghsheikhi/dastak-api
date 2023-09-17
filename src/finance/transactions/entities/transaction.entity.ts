@@ -15,4 +15,7 @@ export class Transaction {
 
     @Column()
     description: number
+
+    @ManyToOne(() => Wallet, (wallet) => wallet.transactions)
+    wallets: Wallet
 }

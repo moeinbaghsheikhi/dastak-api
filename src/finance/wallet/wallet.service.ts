@@ -28,7 +28,7 @@ export class WalletService {
 
   findAll() {
     return this.walletRepository.find({
-      relations: ['bankAccounts' ],
+      relations: ['bankAccounts','transactions' ],
       order: {
         id: {
           direction: "ASC"

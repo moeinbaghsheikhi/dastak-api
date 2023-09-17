@@ -10,13 +10,13 @@ export class UpdateProductsDto {
     // @IsPositive({ message: 'شناسه حساب باید مقدار مثبت داشته باشد' })
     // account_id: number;
 
-    @ApiProperty({
-        description: 'شناسه دسته‌بندی',
-        example: '2',
-    })
-    @IsInt({ message: 'شناسه دسته‌بندی باید یک عدد صحیح باشد' })
-    @IsPositive({ message: 'شناسه دسته‌بندی باید مقدار مثبت داشته باشد' })
-    categories_id: number;
+    // @ApiProperty({
+    //     description: 'شناسه دسته‌بندی',
+    //     example: '2',
+    // })
+    // @IsInt({ message: 'شناسه دسته‌بندی باید یک عدد صحیح باشد' })
+    // @IsPositive({ message: 'شناسه دسته‌بندی باید مقدار مثبت داشته باشد' })
+    // categories_id: number;
 
     @ApiProperty({
         description: 'عنوان محصول',

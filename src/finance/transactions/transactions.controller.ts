@@ -2,7 +2,9 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/commo
 import { TransactionsService } from './transactions.service';
 import { CreateTransactionDto } from './dto/create-transaction.dto';
 import { UpdateTransactionDto } from './dto/update-transaction.dto';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { JwtTokenGuard } from 'src/jwt-token/jwt-token.guard';
+import { Headers, UseGuards } from '@nestjs/common/decorators';
 
 @Controller('transactions')
 @ApiTags('transactions')
@@ -10,8 +12,10 @@ export class TransactionsController {
   constructor(private readonly transactionsService: TransactionsService) { }
 
   @Post()
-  create(@Body() createTransactionDto: CreateTransactionDto) {
-    return this.transactionsService.create(createTransactionDto);
+  @ApiBearerAuth()
+  @UseGuards(JwtTokenGuard)
+  create(@Headers('authorization') token: string, @Body() createTransactionDto: CreateTransactionDto) {
+    return this.transactionsService.create(token, createTransactionDto);
   }
 
   @Get()

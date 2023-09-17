@@ -41,11 +41,11 @@ export class ProductsService {
   }
 
   findAll() {
-    return this.productsRepository.find({ relations: ['category', 'account'] })
+    return this.productsRepository.find({ relations: ['categories', 'account'] })
   }
 
   findOne(id: number) {
-    return this.productsRepository.findOne({ relations: ['category', 'account'], where: { id } });
+    return this.productsRepository.findOne({ relations: ['categories', 'account'], where: { id } });
   }
 
   async update(token: string, id: number, updateProductsDto: UpdateProductsDto) {

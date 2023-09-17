@@ -19,6 +19,10 @@ export class Wallet {
     @JoinColumn()
     bankAccounts: BankAccount
 
+    @OneToMany(() => Transaction, (transaction) => transaction.wallets)
+    @JoinColumn()
+    transactions: Transaction
+
     @ManyToOne(() => Accounts,(account)=> account.wallets)
     accounts: Accounts
 }
