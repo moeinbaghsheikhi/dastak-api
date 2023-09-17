@@ -48,8 +48,10 @@ export class ProductsService {
     return this.productsRepository.findOne({ relations: ['category', 'account'], where: { id } });
   }
 
-  update(id: number, updateProductsDto: UpdateProductsDto) {
-    return this.productsRepository.update({ id }, { ...updateProductsDto });
+  async update(token: string, id: number, updateProductsDto: UpdateProductsDto) {
+    const accountToken = await this.jwtService.verify(token.substr(7))
+    const account = await this.accountRepository.findOneBy({ id: accountToken.account_id })
+    return this.productsRepository.update({ id }, { ...updateProductsDto, account });
   }
 
   remove(id: number) {

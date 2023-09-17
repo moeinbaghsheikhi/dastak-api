@@ -43,8 +43,8 @@ export class ProductsController {
   @ApiBearerAuth()
   @UseGuards(JwtTokenGuard)
   @Patch(':id')
-  async update(@Param('id') id: string, @Body() updateProductDto: UpdateProductsDto) {
-    const data = await this.productsService.update(+id, updateProductDto);
+  async update(@Headers('authorization') token: string, @Param('id') id: string, @Body() updateProductDto: UpdateProductsDto) {
+    const data = await this.productsService.update(token, +id, updateProductDto);
     return ResponseFormat(true, HttpStatus.OK, "OK", data)
   }
 

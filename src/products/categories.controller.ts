@@ -45,8 +45,8 @@ export class CategoriesController {
     @ApiBearerAuth()
     @UseGuards(JwtTokenGuard)
     @Patch(':id')
-    async update(@Param('id') id: string, @Body() updateCategoriesDto: UpdateCategoriesDto) {
-        const data = await this.categoriesService.update(+id, updateCategoriesDto);
+    async update(@Headers('authorization') token: string,@Param('id') id: string, @Body() updateCategoriesDto: UpdateCategoriesDto) {
+        const data = await this.categoriesService.update(token, +id, updateCategoriesDto);
         return ResponseFormat(true, HttpStatus.OK, "OK", data)
     }
 
