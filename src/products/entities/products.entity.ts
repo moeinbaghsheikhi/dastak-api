@@ -19,8 +19,7 @@ export class Products {
     @ManyToOne(() => Accounts, (account) => account.products)
     account: Accounts;
 
-    @ManyToOne(() => Categories)
-    @JoinColumn()
-    categories_id: Categories;
+    @ManyToOne(() => Categories, (category) => category.products)
+    categories: Categories;
 
 }

@@ -35,7 +35,7 @@ export class ProductsService {
     const newProduct = this.productsRepository.create({
       ...createProductsDto,
       account,
-      categories_id:category
+      categories:category
     })
     return await this.productsRepository.save(newProduct)
   }
@@ -49,9 +49,9 @@ export class ProductsService {
   }
 
   async update(token: string, id: number, updateProductsDto: UpdateProductsDto) {
-    const accountToken = await this.jwtService.verify(token.substr(7))
-    const account = await this.accountRepository.findOneBy({ id: accountToken.account_id })
-    return this.productsRepository.update({ id }, { ...updateProductsDto, account });
+    // const accountToken = await this.jwtService.verify(token.substr(7))
+    // const account = await this.accountRepository.findOneBy({ id: accountToken.account_id })
+    return this.productsRepository.update({ id }, { ...updateProductsDto});
   }
 
   remove(id: number) {

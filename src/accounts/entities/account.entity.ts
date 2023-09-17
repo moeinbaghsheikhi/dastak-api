@@ -34,7 +34,7 @@ export class Accounts {
     @OneToMany(() => Factors, (factors) => factors.account)
     factors: Factors[]
 
-    @OneToOne(() => Wallet)
+    @OneToOne(() => Wallet, (wallet) => wallet.accounts)
     @JoinColumn()
     wallets: Wallet
 

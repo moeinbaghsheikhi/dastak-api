@@ -20,27 +20,18 @@ export class AccountsService {
   ) { }
 
 
-  async create(wallet, createAccountDto: CreateAccountDto) {
+  async create(wallets, createAccountDto: CreateAccountDto) {
 
     createAccountDto.password = await bcrypt.hash(createAccountDto.password, 10)
     const account = this.accountRepository.create({
       ...createAccountDto,
-      wallets: wallet
+      wallets
     })
     return this.accountRepository.save(account)
   }
 
   async findAll() {
-    console.log(await this.accountRepository.find({
-      relations: ['wallets'],
-      order: {
-        id: {
-          direction: "ASC"
-        }
-      }
-    }))
     return this.accountRepository.find({
-      relations: ['wallets'],
       order: {
         id: {
           direction: "ASC"
@@ -51,7 +42,13 @@ export class AccountsService {
 
   async findOne(token: string) {
     const accountToken = await this.jwtService.verify(token.substr(7))
-    return this.accountRepository.findOneBy({ id: accountToken.account_id });
+    const id = accountToken.account_id
+    return this.accountRepository.createQueryBuilder('accounts')
+      .leftJoinAndSelect('accounts.wallets', 'wallet')
+      .leftJoinAndSelect('wallet.bankAccounts', 'BankAccounts')
+      .where('accounts.id = :id', { id })
+      .getOne();
+    // return this.accountRepository.find({relations:['wallets']})
   }
 
   findOneByMobile(mobile: string) {
@@ -78,18 +75,18 @@ export class AccountsService {
   }
 
   async login(mobile: string, password: string) {
-    const account = await this.accountRepository.findOne({ where: { mobile: mobile } })
+    const account = await this.accountRepository.findOne({ relations: ['wallets'], where: { mobile: mobile } })
     const isPassword = await bcrypt.compare(password, account.password)
-
-    if (isPassword){
+    if (isPassword) {
       const token = this.jwtService.sign({
         account_id: account.id,
+        wallet_id: account.wallets.id,
         name: account.name,
         mobile: account.mobile,
         password: account.password
       })
 
-      return {...account, token}
+      return { ...account, token }
     }
     return null
   }
@@ -118,9 +115,9 @@ export class AccountsService {
     // }
 
     // Send by pattern
-      try {
+    try {
       const response = await this.httpService
-        .get('http://api.payamak-panel.com/post/Send.asmx/SendByBaseNumber3?username=09135882813&password=T13Y7&text=@161754@'+code+';&to='+mobile)
+        .get('http://api.payamak-panel.com/post/Send.asmx/SendByBaseNumber3?username=09135882813&password=T13Y7&text=@161754@' + code + ';&to=' + mobile)
         .toPromise();
       console.log(JSON.stringify(response.data));
     } catch (error) {

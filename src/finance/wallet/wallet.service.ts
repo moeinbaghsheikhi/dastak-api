@@ -28,12 +28,14 @@ export class WalletService {
 
   findAll() {
     return this.walletRepository.find({
+      relations: ['bankAccounts' ],
       order: {
         id: {
           direction: "ASC"
         }
       }
     })
+
   }
 
   update(id: number, updateWalletDto: UpdateWalletDto) {

@@ -13,6 +13,8 @@ import { WalletModule } from './finance/wallet/wallet.module';
 import { BankAccountsModule } from './finance/bank_accounts/bank_accounts.module';
 import { TransactionsModule } from './finance/transactions/transactions.module';
 import { Wallet } from './finance/wallet/entities/wallet.entity';
+import { Transaction } from './finance/transactions/entities/transaction.entity';
+import { BankAccount } from './finance/bank_accounts/entities/bank_account.entity';
 
 @Module({
   imports: [
@@ -22,7 +24,7 @@ import { Wallet } from './finance/wallet/entities/wallet.entity';
       port: 5432,
       username: 'postgres',
       database: 'dastak',
-      entities: [Accounts, Factors, Factor_items, Categories, Products,Wallet],
+      entities: [Accounts, Factors, Factor_items, Categories, Products, Wallet, Transaction, BankAccount],
       synchronize: true
     }),
     ConfigModule.forRoot(),
