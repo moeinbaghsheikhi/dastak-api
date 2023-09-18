@@ -32,8 +32,9 @@ export class CategoriesService {
         return this.categoriesRepository.save(newCategories)
     }
 
-    findAll() {
-        return this.categoriesRepository.find({ relations: ['account'] });
+    async findAll(token: string) {
+        const accountToken = await this.jwtService.verify(token.substr(7))
+        return (await this.accountRepository.findOne({ relations: ['categories'], where: { id: accountToken.account_id } })).categories
     }
 
     findOne(id: number) {

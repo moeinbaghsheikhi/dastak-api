@@ -25,8 +25,8 @@ export class CategoriesController {
     @ApiBearerAuth()
     @UseGuards(JwtTokenGuard)
     @Get()
-    async findAll() {
-        const data = await this.categoriesService.findAll();
+    async findAll(@Headers('authorization') token: string) {
+        const data = await this.categoriesService.findAll(token);
 
         return ResponseFormat(true, HttpStatus.OK, "OK", data)
     }
