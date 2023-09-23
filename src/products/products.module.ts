@@ -9,11 +9,13 @@ import { CategoriesController } from './categories.controller';
 import { CategoriesService } from './categories.service';
 import { JwtModule } from '@nestjs/jwt';
 import { jwtStrategy } from 'src/strategies/jwt.strategy';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [
+    ConfigModule.forRoot(),
     JwtModule.register({
-      secret: 'secret' ,
+      secret: process.env.SECRET ,
       signOptions: { expiresIn: '30d' }
     }),
      TypeOrmModule.forFeature([Products, Categories, Accounts])],

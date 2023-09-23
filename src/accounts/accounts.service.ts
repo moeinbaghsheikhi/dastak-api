@@ -75,11 +75,17 @@ export class AccountsService {
     return this.accountRepository.findOneBy({ mobile })
   }
 
-  async login(mobile: string, password: string) {
+  async login(mobile: string, password: string)  {
+    console.log(process.env.SECRET)
     const account = await this.accountRepository.findOne({ relations: ['wallets'], where: { mobile: mobile } })
+    // console.log(account.id)
+    // console.log(account.wallets.id)
+    // console.log(account.name)
+    // console.log(account.mobile)
+    // console.log(account.password)
     const isPassword = await bcrypt.compare(password, account.password)
     if (isPassword) {
-      const token = this.jwtService.sign({
+      const token = await this.jwtService.sign({
         account_id: account.id,
         wallet_id: account.wallets.id,
         name: account.name,

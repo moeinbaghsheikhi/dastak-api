@@ -10,13 +10,14 @@ import { FactorsItemService } from './factors_item.service';
 import { Products } from 'src/products/entities/products.entity';
 import { jwtStrategy } from 'src/strategies/jwt.strategy';
 import { JwtModule } from '@nestjs/jwt';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [
+    ConfigModule.forRoot(),
     JwtModule.register({
-      secret: 'secret' ,
+      secret: process.env.SECRET ,
       signOptions: { expiresIn: '30d' }
-
     }),
     TypeOrmModule.forFeature([Factors, Factor_items, Accounts, Products])],
   controllers: [FactorsController, FactorsItemController],

@@ -6,11 +6,13 @@ import { HttpModule } from '@nestjs/axios';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Accounts } from 'src/accounts/entities/account.entity';
 import { Wallet } from './entities/wallet.entity';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [
+    ConfigModule.forRoot(),
     JwtModule.register({
-      secret: 'secret',
+      secret: process.env.SECRET,
       signOptions: { expiresIn: '30d' }
 
     }),

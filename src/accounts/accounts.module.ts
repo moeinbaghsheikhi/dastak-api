@@ -11,15 +11,18 @@ import { jwtStrategy } from 'src/strategies/jwt.strategy';
 import { Wallet } from 'src/finance/wallet/entities/wallet.entity';
 import { WalletController } from 'src/finance/wallet/wallet.controller';
 import { WalletService } from 'src/finance/wallet/wallet.service';
+import { ConfigModule } from '@nestjs/config';
+
 @Module({
   imports: [
+    ConfigModule.forRoot(),
     JwtModule.register({
-      secret: 'secret',
+      secret: process.env.SECRET,
       signOptions: { expiresIn: '30d' }
 
     }),
     TypeOrmModule.forFeature([Accounts, Products, Categories, Wallet]), HttpModule],
   controllers: [AccountsController],
-  providers: [AccountsService, jwtStrategy,WalletService],
+  providers: [AccountsService, jwtStrategy, WalletService],
 })
 export class AccountsModule { }
